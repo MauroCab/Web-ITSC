@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web-ITSC-Server", "Web-ITSC-Server\Web-ITSC-Server.csproj", "{A076D438-283B-4A70-AC55-B702DD335A09}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web-ITSC-BD", "Web-ITSC-BD\Web-ITSC-BD.csproj", "{6D2C8263-D87F-4A0C-B9F1-E4E9F8876CBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web-ITSC-Repositorio", "Web-ITSC-Repositorio\Web-ITSC-Repositorio.csproj", "{44183F91-666F-4B62-905D-C29BC665CECA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web-ITSC-Shared", "Web-ITSC-Shared\Web-ITSC-Shared.csproj", "{86C983C3-6B79-41EC-AA2C-7D003253EFA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{6D2C8263-D87F-4A0C-B9F1-E4E9F8876CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D2C8263-D87F-4A0C-B9F1-E4E9F8876CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D2C8263-D87F-4A0C-B9F1-E4E9F8876CBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44183F91-666F-4B62-905D-C29BC665CECA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44183F91-666F-4B62-905D-C29BC665CECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44183F91-666F-4B62-905D-C29BC665CECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44183F91-666F-4B62-905D-C29BC665CECA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86C983C3-6B79-41EC-AA2C-7D003253EFA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86C983C3-6B79-41EC-AA2C-7D003253EFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86C983C3-6B79-41EC-AA2C-7D003253EFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86C983C3-6B79-41EC-AA2C-7D003253EFA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

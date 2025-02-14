@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2">
       <PrivateAssets>all</PrivateAssets>
@@ -17,11 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Web-ITSC-BD\Web-ITSC-BD.csproj" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\Web-ITSC-Repositorio\Web-ITSC-Repositorio.csproj" />
+    <ProjectReference Include="..\Web-ITSC-Shared\Web-ITSC-Shared.csproj" />
   </ItemGroup>
 
 </Project>
