@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Web_ITSC_BD.Data.Entity;
 using Web_ITSC_BD.Data;
 using Web_ITSC_Repositorio.Repositorios.Genericos;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web_ITSC_Repositorio.Repositorios.Localizacion
 {

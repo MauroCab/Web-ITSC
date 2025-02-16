@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Web_ITSC_BD.Data.Entity;
 
 namespace Web_ITSC_Shared.DTO
 {
@@ -43,4 +45,22 @@ namespace Web_ITSC_Shared.DTO
         public string Sede { get; set; }
 
     }
+
+    public class CrearCertificadoAlumnoDTO
+    {
+        public CrearCertificadoAlumnoDTO(Alumno alumnoConCertificado, DateTime hoy)
+        {
+            AlumnoId = alumnoConCertificado.Id;
+            Alumno = alumnoConCertificado;
+            FechaEmision = hoy;
+        }
+
+        [Required(ErrorMessage = "El alumno es necesario")]
+        public int AlumnoId { get; set; }
+        public Alumno Alumno { get; set; }
+
+        [Required(ErrorMessage = "La fecha de emisión del certificado es necesaria")]
+        public DateTime FechaEmision { get; set; }
+    }
+
 }
