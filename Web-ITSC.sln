@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web-ITSC-Repositorio", "Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web-ITSC-Shared", "Web-ITSC-Shared\Web-ITSC-Shared.csproj", "{86C983C3-6B79-41EC-AA2C-7D003253EFA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web-ITSC-Client", "Web-ITSC-Client\Web-ITSC-Client.csproj", "{0E7E793E-B470-4765-8E8B-602C400B96D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{86C983C3-6B79-41EC-AA2C-7D003253EFA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86C983C3-6B79-41EC-AA2C-7D003253EFA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86C983C3-6B79-41EC-AA2C-7D003253EFA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E7E793E-B470-4765-8E8B-602C400B96D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E7E793E-B470-4765-8E8B-602C400B96D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E7E793E-B470-4765-8E8B-602C400B96D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E7E793E-B470-4765-8E8B-602C400B96D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
