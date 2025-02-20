@@ -1,0 +1,302 @@
+﻿@page "/Administracion/ListaAlumnos"
+@inject HttpClient http
+@inject NavigationManager Navigation
+@using Web_ITSC_Shared.DTO
+
+<div>
+    <h3>Listado de Alumnos</h3>
+
+    <!-- Contenedor para los botones -->
+    <div style="position: fixed; top: 80px; right: 20px; z-index: 9999; display: flex; gap: 10px;">
+
+        <!-- Botón de "Cargar + Alumnos" -->
+        <button class="btn rounded-circle" style="width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; background-color: #00bfff;" @onclick="IrACargaAlumnos">
+            <i class="bi bi-person-plus" style="color: white; font-size: 20px;"></i> <!-- Ícono de persona con + -->
+        </button>
+
+        <!-- Botón de "Importar Excel" -->
+        <button class="btn rounded-circle" style="width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; background-color: #28a745;" @onclick="IrAImportarExcel">
+            <i class="bi bi-file-earmark-excel" style="color: white; font-size: 20px;"></i> <!-- Ícono de Excel -->
+        </button>
+
+    </div>
+
+    <!-- Filtros de búsqueda -->
+    <div class="form-group">
+        <label for="search">Buscar</label>
+        <InputText class="form-control" id="search" @bind-Value="searchTerm" placeholder="Buscar por nombre, apellido, o dni " />
+    </div>
+
+    <div class="form-group">
+        <label for="carreraFilter">Filtrar por Carrera</label>
+        <InputSelect class="form-control" id="carreraFilter" @bind-Value="selectedCarrera">
+            <option value="">Seleccione una carrera</option>
+            @foreach (var carrera in availableCarreras)
+            {
+                <option value="@carrera.Abreviatura">@carrera.Nombre</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="cohorteFilter">Filtrar por Cohorte</label>
+        <InputSelect class="form-control" id="cohorteFilter" @bind-Value="selectedCohorte">
+            <option value="">Seleccione un cohorte</option>
+            @for (int i = DateTime.Now.Year; i >= 2000; i--)
+            {
+                <option value="@i">@i</option>
+            }
+        </InputSelect>
+    </div>
+
+
+
+    <!-- Mostrar solo si se selecciona algún filtro -->
+    @if (HasFilters())
+    {
+        <div class="table-container" style="height: 400px; overflow-y: auto; border: 1px solid #ddd;">
+            <!-- Tabla de Alumnos -->
+            <table class="table table-hover table-striped shadow-lg rounded" style="width: 100%; table-layout: fixed;">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Carrera</th>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Cohorte</th>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Nombre</th>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Apellido</th>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Documento</th>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var alumno in FilteredAlumnos)
+                    {
+                        <tr>
+                            <td style="text-align: center;">@alumno.InscripcionesEnCarreras.FirstOrDefault()?.AbreviaturaCarrera</td>
+                            <td style="text-align: center;">@(alumno.InscripcionesEnCarreras.FirstOrDefault()?.Cohorte.ToString())</td>
+                            <td style="text-align: center;">@alumno.Nombre</td>
+                            <td style="text-align: center;">@alumno.Apellido</td>
+                            <td style="text-align: center;">@alumno.Documento</td>
+                            <td style="text-align: center;">
+                                <button class="btn btn-info btn-sm mx-1" @onclick="() => VerDetalles(alumno)">
+                                    <i class="bi bi-search"></i> <!-- Lupa de Bootstrap -->
+                                </button>
+                                <button class="btn btn-info btn-sm mx-1" @onclick="() => IrAEditarAlumno(alumno.Documento)">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm mx-1" @onclick="() => EliminarAlumno(alumno.Documento)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>Por favor, seleccione al menos un filtro para ver los resultados.</p>
+    }
+
+    <!-- Modal de confirmación de eliminación -->
+    @if (EliminarExitoso)
+    {
+        <div class="modal fade show" style="display:block;" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Eliminación Exitosa</h5>
+                        <button type="button" class="btn-close" @onclick="CerrarModalEliminar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>El alumno ha sido eliminado correctamente.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @onclick="CerrarModalEliminar">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-backdrop fade show" @onclick="CerrarModalEliminar"></div>
+    }
+
+    @if (ModalVisible)
+    {
+        <div class="modal fade show" style="display:block;" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Detalles del Alumno</h5>
+                        <button type="button" class="btn-close" @onclick="CerrarModal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Nombre:</strong> @AlumnoSeleccionado.Nombre</p>
+                        <p><strong>Apellido:</strong> @AlumnoSeleccionado.Apellido</p>
+                        <p><strong>Cohorte:</strong> @AlumnoSeleccionado.InscripcionesEnCarreras.FirstOrDefault()?.Cohorte.ToString() </p>
+                        <p><strong>Documento:</strong> @AlumnoSeleccionado.Documento</p>
+                        <p><strong>CUIL:</strong> @AlumnoSeleccionado.Cuil</p>
+                        <p><strong>Edad:</strong> @AlumnoSeleccionado.Edad</p>
+                        <p><strong>Email:</strong> @AlumnoSeleccionado.Email</p>
+                        <p><strong>Sexo:</strong> @AlumnoSeleccionado.Sexo</p>
+                        <p><strong>País:</strong> @AlumnoSeleccionado.Pais</p>
+                        <p><strong>Provincia:</strong> @AlumnoSeleccionado.Provincia</p>
+                        <p><strong>Departamento:</strong> @AlumnoSeleccionado.Departamento</p>
+                        <p><strong>Localidad:</strong> @AlumnoSeleccionado.Localidad</p>
+                        <p><strong>Título Base:</strong> @AlumnoSeleccionado.TituloBase</p>
+                        <p><strong>Fotocopia DNI:</strong> @AlumnoSeleccionado.FotocopiaDNI</p>
+                        <p><strong>Constancia CUIL:</strong> @AlumnoSeleccionado.ConstanciaCUIL</p>
+                        <p><strong>Partida de Nacimiento:</strong> @AlumnoSeleccionado.PartidaNacimiento</p>
+                        <p><strong>Analítico:</strong> @AlumnoSeleccionado.Analitico</p>
+                        <p><strong>Foto Carnet:</strong> @AlumnoSeleccionado.FotoCarnet</p>
+                        <p><strong>CUS:</strong> @AlumnoSeleccionado.Cus</p>
+                        <p><strong>Estado:</strong> @(AlumnoSeleccionado.EstadoAlumno ? "Activo" : "Inactivo")</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @onclick="CerrarModal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-backdrop fade show" @onclick="CerrarModal"></div>
+    }
+</div>
+
+@code {
+    private List<BuscarAlumnoDTO> alumnos = new List<BuscarAlumnoDTO>();
+    private List<GetCarreraDTO> availableCarreras = new List<GetCarreraDTO>(); // Carreras obtenidas del backend
+    private List<int> availableCohortes = new List<int>(); // Lista de años (cohortes)
+    private string selectedCarrera = null; // Carrera seleccionada
+    private int? selectedCohorte = null;  // Cohorte seleccionado
+    private string searchTerm = string.Empty;
+    private bool EliminarExitoso { get; set; } = false; // Variable para controlar la visibilidad del modal
+    private bool ModalVisible { get; set; } = false;
+    private BuscarAlumnoDTO AlumnoSeleccionado { get; set; }
+
+    // Método que verifica si hay filtros aplicados
+    private bool HasFilters()
+    {
+        return !string.IsNullOrWhiteSpace(searchTerm) || !string.IsNullOrWhiteSpace(selectedCarrera) || selectedCohorte.HasValue;
+    }
+
+    // Propiedad calculada para obtener los alumnos filtrados
+    private IEnumerable<BuscarAlumnoDTO> FilteredAlumnos
+    {
+        get
+        {
+            var filtered = alumnos.AsEnumerable();
+
+            // Filtrar por el término de búsqueda
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                filtered = filtered.Where(a =>
+                    a.Nombre.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    a.Apellido.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    a.Documento.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Filtrar por Carrera seleccionada
+            if (!string.IsNullOrWhiteSpace(selectedCarrera))
+            {
+                filtered = filtered.Where(a => a.InscripcionesEnCarreras
+                    .Any(ic => ic.AbreviaturaCarrera.Contains(selectedCarrera, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            // Filtrar por Cohorte seleccionado
+            if (selectedCohorte.HasValue)
+            {
+                filtered = filtered.Where(a => a.InscripcionesEnCarreras
+                    .Any(ic => ic.Cohorte == selectedCohorte.Value));
+            }
+
+            return filtered;
+        }
+    }
+
+    // Este método se ejecuta al cargar la página
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Obtener la lista de alumnos del API
+            alumnos = await http.GetFromJsonAsync<List<BuscarAlumnoDTO>>("api/Alumnos/buscar");
+
+            // Obtener las carreras disponibles del API
+            availableCarreras = await http.GetFromJsonAsync<List<GetCarreraDTO>>("api/Carreras");
+
+            // Generar la lista de cohortes desde el 2000 hasta el año actual
+            availableCohortes = Enumerable.Range(2000, DateTime.Now.Year - 1999).ToList();
+
+            // Ordenar la lista para que el año actual esté primero
+            availableCohortes = availableCohortes.OrderByDescending(c => c == DateTime.Now.Year).ThenByDescending(c => c).ToList();
+        }
+        catch (Exception ex)
+        {
+            // Manejo de errores
+            Console.WriteLine($"Error al obtener los datos: {ex.Message}");
+        }
+    }
+
+    // Métodos adicionales que puedes tener para acciones de eliminar, ver detalles, etc.
+    private void IrACargaAlumnos()
+    {
+        // Redirige a la página de CargaAlumnos
+        Navigation.NavigateTo("/Administracion/CargaAlumnos");
+    }
+
+    private void IrAEditarAlumno(string documento)
+    {
+        // Redirige a la página de edición del alumno
+        Navigation.NavigateTo($"/Administracion/EditarAlumnos/{documento}");
+    }
+    private void IrAImportarExcel()
+    {
+        // Redirige a la página de edición del alumno
+        Navigation.NavigateTo($"/Administracion/ImportarAlumnos");
+    }
+
+    // Método para eliminar alumno
+    private async Task EliminarAlumno(string documento)
+    {
+        try
+        {
+            var response = await http.DeleteAsync($"api/Alumnos/{documento}");
+            if (response.IsSuccessStatusCode)
+            {
+                alumnos = alumnos.Where(a => a.Documento != documento).ToList();
+                EliminarExitoso = true;
+            }
+            else
+            {
+                Console.WriteLine("Error al eliminar el alumno.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+
+    // Método para cerrar el modal
+    private void CerrarModalEliminar()
+    {
+        EliminarExitoso = false; // Ocultar el modal
+    }
+
+    private void VerDetalles(BuscarAlumnoDTO alumno)
+    {
+        AlumnoSeleccionado = alumno;
+        ModalVisible = true;
+    }
+
+    private void CerrarModal()
+    {
+        ModalVisible = false;
+        AlumnoSeleccionado = null;
+    }
+}
+
+
+

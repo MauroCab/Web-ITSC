@@ -1,0 +1,19 @@
+﻿@page "/Administracion/Materia/{MateriaId:int}"
+@inject IHttpServicios http
+@inject HttpClient http
+@inject NavigationManager Navigation
+@using System.Net.Http.Json
+@using Web_ITSC_Shared.DTO
+
+<h3>EditarMateria</h3>
+
+@code {
+    [Parameter]
+    public int MateriaId { get; set; }
+
+    protected override void OnInitialized()
+    {
+        //Se puede usar el MateriaId recibido en la URL
+        Console.WriteLine($"El ID de la materia es: {MateriaId}");
+    }
+}

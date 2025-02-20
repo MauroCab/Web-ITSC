@@ -1,0 +1,26 @@
+﻿@inject IHttpServicios http
+
+<select @onchange="OnDepartamentoChanged">
+	<option value="">Seleccione un departamento</option>
+	@foreach (var departamento in Departamentos)
+	{
+		<option value="@departamento.Id">@departamento.Nombre</option>
+	}
+</select>
+
+@code {
+	private List<Departamento> Departamentos = new List<Departamento>();
+	[Parameter] public int ProvinciaId { get; set; }
+	protected override async Task OnParametersSetAsync()
+	{
+		if (ProvinciaId > 0)
+		{
+			Departamentos = await http.SelectDepartamentosPorProvinciaAsync(ProvinciaId);
+		}
+	}
+
+	private Task OnDepartamentoChanged(ChangeEventArgs e)
+	{
+		return Task.CompletedTask;
+	}
+}

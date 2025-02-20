@@ -1,4 +1,4 @@
-html, body {
+﻿html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -17,7 +17,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -101,3 +101,175 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+/* Estilos para centrar los botones */
+body, html {
+    height: 100%; /* Asegurarse de que la altura de la p�gina ocupe todo el espacio */
+    margin: 0; /* Eliminar margenes por defecto */
+}
+
+.role-selection {
+    display: flex;
+    flex-direction: column; /* Organizar los botones en columna */
+    justify-content: center; /* Centrar verticalmente */
+    align-items: center; /* Centrar horizontalmente */
+    height: 70vh; /* Asegurar que ocupe toda la altura de la pantalla */
+}
+
+.btn-custom {
+    font-weight: bold; /* Poner los botones en negrita */
+    padding: 10px 20px; /* Ajustar tama�o y espaciado */
+    width: 80%; /* Ajustar el ancho de los botones */
+    margin-bottom: 15px; /* Espaciado entre botones */
+    text-align: center; /* Centrar el texto dentro de los botones */
+    background-color: #5f228d !important; /* Color de fondo (con !important) */
+    color: white !important; /* Color del texto (con !important) */
+    border: 2px solid #007bff; /* Color del borde (opcional) */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s, border-color 0.3s; /* Suavizado de transici�n */
+}
+
+    /* Efecto hover */
+    .btn-custom:hover {
+        background-color: #4e5471; /* Color de fondo al pasar el rat�n (hover) */
+        border-color: #5f228d; /* Cambiar el color del borde al pasar el rat�n */
+        cursor: pointer; /* Cambiar el cursor a pointer para indicar que es interactivo */
+    }
+/*fondo inicio*/
+
+
+.page-background {
+    /*    background-image: url('../itsc1.png');
+*/ background-image: url('../its1.png');
+    background-size: 380px 350px; /* Ajusta el tama�o de la imagen (ancho x alto) */
+    background-position: center; /* Centra la imagen en el contenedor */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    height: 60vh; /* Ajusta la altura de la p�gina */
+    display: flex;
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+    text-align: center; /* Centra el texto dentro del contenedor */
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.center-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+}
+/*_________________________________________
+*/
+/* Fijar el navbar en la parte superior */
+/* Aseg�rate de agregar esto en tu archivo app.css */
+.table {
+    font-size: 0.95rem; /* Fuente ligeramente m�s peque�a */
+    border-collapse: separate;
+    border-spacing: 0 10px; /* Espacio entre las filas */
+
+    width: 100%;
+    table-layout: fixed;
+}
+
+
+
+    .table th, .table td {
+        padding: 12px 15px;
+        vertical-align: middle;
+        border: none; /* Elimina bordes adicionales */
+    }
+
+    .table th {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .table td {
+        text-align: left;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f1f1f1; /* Color de fondo al pasar el rat�n */
+        transition: background-color 0.3s ease;
+    }
+
+.table-responsive {
+    margin-top: 20px;
+}
+
+.table .btn {
+    border-radius: 5px;
+    font-size: 0.85rem;
+}
+
+.table .btn-sm {
+    padding: 5px 10px;
+}
+
+/* Colores personalizados de botones */
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+    .btn-info:hover {
+        background-color: #138496;
+        border-color: #117a8b;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+/*   home dise�o __________________________________________________________________
+*/ /* Cambia el fondo del contenedor */
+.background-container {
+    background-color: #f0f0f0; /* El color de fondo */
+    padding: 80px; /* Un poco de espacio alrededor */
+    border-radius: 8px; /* Opcional: darle bordes redondeados al contenedor */
+}
+
+/* Estilo para el texto central */
+.center-text {
+    text-align: center;
+}
+
+/* Estilo de los botones */
+.btn-custom {
+    background-color: #00bfff; /* Color del bot�n */
+    color: white;
+    border-radius: 50px; /* Bordes redondeados */
+    font-size: 1.2rem;
+    width: 250px;
+    height: 60px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+    /* Sombra y animaci�n para los botones */
+    .btn-custom:hover {
+        background-color: #00a1e6;
+        transform: translateY(-5px); /* Animaci�n de elevaci�n */
+    }
+
+    /* Espacio entre botones */
+    .btn-custom + .btn-custom {
+        margin-top: 15px;
+    }
+
+    /* Estilos para los �conos dentro de los botones */
+    .btn-custom i {
+        margin-right: 10px; /* Espacio entre el icono y el texto */
+        font-size: 1.5rem;
+    }

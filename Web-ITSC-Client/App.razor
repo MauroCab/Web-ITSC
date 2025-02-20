@@ -1,4 +1,6 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@layout MainLayout
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -10,3 +12,15 @@
         </LayoutView>
     </NotFound>
 </Router>
+
+@code {
+    // Inyección del servicio
+    [Inject] public ServicioRol ServicioRol { get; set; }
+
+    // Esta es la manera correcta de acceder al servicio
+    protected override async Task OnInitializedAsync()
+    {
+        var rol = ServicioRol.ObtenerRol();  // Usando el servicio
+        Console.WriteLine($"Rol obtenido: {rol}");  // Ejemplo de uso
+    }
+}

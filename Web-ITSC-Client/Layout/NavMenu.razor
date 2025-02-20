@@ -1,33 +1,59 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Web-ITSC-Client</a>
+        <a class="navbar-brand" href="">ITSC - Login</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+@* Menú visible solo para Administradores *@
+@if (Role == "Administrador")
+{
+    <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+        <nav class="flex-column">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="/Inicio" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill me-2" aria-hidden="true"></span> Inicio
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="/Administracion/ListaAlumnos">
+                    <span class="bi bi-person-lines-fill me-2" aria-hidden="true"></span> Alumnos
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="api/Nota">
+                    <span class="bi bi-file-earmark-text me-2" aria-hidden="true"></span> Notas Finales
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="/GenerarCertificado">
+                    <span class="bi bi-file-earmark-check me-2" aria-hidden="true"></span> Generar Certificado
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="/MateriasPlanEstudio">
+                    <span class="bi bi-book me-2" aria-hidden="true"></span> Materias en P.Estudio
+                </NavLink>
+            </div>
+
+            @* <div class="nav-item px-3">
+                <NavLink class="nav-link d-flex align-items-center" href="/Administracion/ImportarAlumnos">
+                    <span class="bi bi-book me-2" aria-hidden="true"></span> Importar Alumnos
+                </NavLink>
+            </div> *@
+        </nav>
+    </div>
+}
 
 @code {
+    [Parameter] public string Role { get; set; }
+
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;

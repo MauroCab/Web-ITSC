@@ -9,6 +9,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.11" PrivateAssets="all" />
+    <PackageReference Include="NPOI" Version="2.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Web-ITSC-BD\Web-ITSC-BD.csproj" />
+    <ProjectReference Include="..\Web-ITSC-Shared\Web-ITSC-Shared.csproj" />
   </ItemGroup>
 
 </Project>

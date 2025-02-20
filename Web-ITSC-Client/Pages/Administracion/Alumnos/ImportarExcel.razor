@@ -1,0 +1,154 @@
+﻿@page "/Administracion/ImportarAlumnos"
+@inject IHttpServicios http
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+@using Microsoft.AspNetCore.Components
+@using System.Data
+@using System.IO
+@using NPOI.XSSF.UserModel
+@using NPOI.SS.UserModel
+
+<h3>Importar Alumnos</h3>
+
+<label class="custom-file-upload btn btn-primary">
+    <i class="bi bi-file-earmark-arrow-up"></i> Importar Excel
+    <InputFile OnChange="@ImportExcelFile" style="display:none;" />
+</label>
+
+<div class="table-responsive">
+    <table class="table table-hover table-sm custom-table">
+        <thead>
+            <tr>
+                @foreach (var col in dt.Columns.Cast<DataColumn>().Take(4))
+                {
+                    <th>@col.ColumnName</th>
+                }
+                <th></th> <!-- Columna para la lupa -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in dt.Rows)
+            {
+                <tr>
+                    @foreach (var col in dt.Columns.Cast<DataColumn>().Take(4))
+                    {
+                        <td class="text-center" style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                            title="@row[col.ColumnName]">
+                            @row[col.ColumnName]
+                        </td> <!-- Centrar datos -->
+                    }
+                    <td class="text-center">
+                        <!-- Lupa para abrir el modal -->
+                        <button class="btn btn-info btn-sm" @onclick="() => OpenModal(row)">🔍</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    /* Personalización de la tabla */
+    .custom-table {
+        border: 1px solid #00bfff; /* Borde celeste */
+        background-color: #f0f8ff; /* Fondo celeste claro */
+    }
+
+        .custom-table th, .custom-table td {
+            border: 0.5px solid #00bfff; /* Borde celeste para las celdas */
+        }
+
+        .custom-table th {
+            background-color: #00bfff; /* Fondo celeste para los encabezados */
+            color: white; /* Color blanco para el texto en los encabezados */
+        }
+
+        .custom-table tbody tr:hover {
+            background-color: #e0f7ff; /* Fondo celeste claro cuando se pasa el ratón sobre la fila */
+        }
+</style>
+<!-- Modal para ver el resto de la información -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Detalles del Alumno</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Mostrar los detalles completos del alumno -->
+                <div>
+                    <p><strong>Nombre:</strong> @selectedRow?["Nombre"]</p>
+                    <p><strong>Apellido:</strong> @selectedRow?["Apellido"]</p>
+                    <p><strong>Documento:</strong> @selectedRow?["Documento"]</p>
+                    <p><strong>Email:</strong> @selectedRow?["Email"]</p>
+                    <p><strong>Sexo:</strong> @selectedRow?["S"]</p>
+                    <p><strong>Fecha de Nacimiento:</strong> @selectedRow?["Fecha de Nacimiento"]</p>
+                    <p><strong>Localidad:</strong> @selectedRow?["Localidad"]</p>
+                    <p><strong>Departamento:</strong> @selectedRow?["Departamento"]</p>
+                    <p><strong>Provincia:</strong> @selectedRow?["Provincia"]</p>
+                    <p><strong>País:</strong> @selectedRow?["Pais"]</p>
+                    <p><strong>Telefono:</strong> @selectedRow?["Telefono"]</p>
+                    <p><strong>TituloBase:</strong> @selectedRow?["Tbase"]</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Variable para almacenar los datos del archivo Excel
+    DataTable dt = new DataTable();
+    // Variable para almacenar la fila seleccionada para el modal
+    DataRow selectedRow;
+
+    async Task ImportExcelFile(InputFileChangeEventArgs e)
+    {
+        var fileStream = e.File.OpenReadStream();
+        var ms = new MemoryStream();
+        await fileStream.CopyToAsync(ms);
+        fileStream.Close();
+        ms.Position = 0;
+
+        ISheet sheet;
+        var xsswb = new XSSFWorkbook(ms);
+        sheet = xsswb.GetSheetAt(0);
+        IRow hr = sheet.GetRow(0);
+
+        var rl = new List<string>();
+        int cc = hr.LastCellNum;
+
+        // Añadir las columnas de la hoja de Excel a la tabla
+        for (var j = 0; j < cc; j++)
+        {
+            ICell cell = hr.GetCell(j);
+            dt.Columns.Add(cell.ToString());
+        }
+
+        // Leer las filas de la hoja de Excel y añadirlas a la tabla
+        for (var j = (sheet.FirstRowNum + 1); j <= sheet.LastRowNum; j++)
+        {
+            var r = sheet.GetRow(j);
+            for (var i = r.FirstCellNum; i < cc; i++)
+            {
+                rl.Add(r.GetCell(i).ToString());
+            }
+            if (rl.Count > 0)
+            {
+                dt.Rows.Add(rl.ToArray());
+            }
+            rl.Clear();
+        }
+    }
+
+    // Función que abre el modal y asigna la fila seleccionada
+    void OpenModal(DataRow row)
+    {
+        selectedRow = row;
+        // Usar JS interop para abrir el modal de Bootstrap
+        JS.InvokeVoidAsync("openModal");
+    }
+}

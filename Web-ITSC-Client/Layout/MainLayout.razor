@@ -1,12 +1,18 @@
 ﻿@inherits LayoutComponentBase
+@inject ServicioRol ServicioRol
+
+
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        <!-- Pasamos el rol al componente NavMenu. Usamos el método ObtenerRol() para obtener el rol actualizado. -->
+        <NavMenu Role="@ServicioRol.ObtenerRol()" />
     </div>
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <NavLink class="nav-link" href="https://localhost:7262/swagger" target="_blank">
+                <span class="bi bi-engranaje-nav-menu" aria-hidden="true"></span> Swagger
+            </NavLink>
         </div>
 
         <article class="content px-4">

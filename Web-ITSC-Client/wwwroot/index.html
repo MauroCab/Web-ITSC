@@ -8,8 +8,99 @@
     <base href="/" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="css/app.css" />
-    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="stylesheet" href="path/to/styles.css">
     <link href="Web-ITSC-Client.styles.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        /* Estilo para el botón importar */
+        .custom-file-upload {
+            justify-content: center;
+            align-items: center;
+            background-color: #00bfff;
+        }
+    </style>
+    <!-- Agregar los estilos aquí -->
+    <style>
+        .top-row {
+            background-color: #04163d;
+            bff; /* Azul */
+            padding: 10px 20px; /* Ajusta el padding si es necesario */
+        }
+
+            .top-row a {
+                color: white; /* Cambiar el color del texto a blanco */
+                text-decoration: none; /* Eliminar subrayado del enlace */
+            }
+    </style>
+    <style>
+        /* Reducir la altura del dropdown (menú de opciones) */
+        .form-group select {
+            max-height: 1cm; /* Altura del menú desplegable */
+            overflow-y: auto; /* Habilita el scroll si las opciones exceden la altura */
+        }
+
+        /* Ajusta el padding para las opciones del dropdown */
+        select option {
+            padding: 8px; /* Puedes ajustar el padding de las opciones */
+        }
+    </style>
+    <style>
+        .nav-link {
+            display: flex;
+            align-items: center; /* Alinea el contenido verticalmente en el centro */
+            height: 70px; /* Establecer una altura fija si es necesario */
+        }
+
+            .nav-link span {
+                font-size: 1 rem; /* Tamaño del ícono */
+                margin-right: 10px; /* Espacio entre el ícono y el texto */
+                line-height: 1; /* Asegura que el ícono y el texto estén centrados */
+            }
+    </style>
+    <!--home diseño-->
+    <style>
+        /* Cambia el fondo del contenedor */
+        .background-container {
+            background-color: #04163d; /* El color de fondo */
+            padding: 80px; /* Un poco de espacio alrededor */
+            border-radius: 8px; /* Opcional: darle bordes redondeados al contenedor */
+        }
+
+        /* Estilo para el texto central */
+        .center-text {
+            text-align: center;
+        }
+
+        /* Estilo de los botones */
+        .btn-custom {
+            background-color: #00bfff; /* Color del botón */
+            color: white;
+            border-radius: 50px; /* Bordes redondeados */
+            font-size: 1.2rem;
+            width: 250px;
+            height: 60px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+            /* Sombra y animación para los botones */
+            .btn-custom:hover {
+                background-color: #00a1e6;
+                transform: translateY(-5px); /* Animación de elevación */
+            }
+
+            /* Espacio entre botones */
+            .btn-custom + .btn-custom {
+                margin-top: 15px;
+            }
+
+            /* Estilos para los íconos dentro de los botones */
+            .btn-custom i {
+                margin-right: 10px; /* Espacio entre el icono y el texto */
+                font-size: 1.5rem;
+            }
+    </style>
+
 </head>
 
 <body>
@@ -27,6 +118,25 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
+    <script>
+        function downloadFileFromBase64(base64, fileName) {
+            const link = document.createElement('a');
+            link.href = `data:application/pdf;base64,${base64}`;
+            link.download = fileName;
+            link.click();
+        }
+    </script>
+    <script>
+        function openModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+            myModal.show();
+        }
+
+        function closeModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+            myModal.hide();
+        }
+    </script>
 </body>
 
 </html>

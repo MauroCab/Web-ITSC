@@ -1,0 +1,61 @@
+﻿@page "/GenerarCertificado"
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+<h3>Generar Certificado</h3>
+
+<form>
+    <p> <label>Ingrese el documento del alumno:</label> </p>
+    <p> <input type="text" @bind="documento" /> </p>
+
+
+    <!-- Label de error para campo vacío -->
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p> <label style="color: red;">@errorMessage</label> </p>
+    }
+
+    <button type="button" @onclick="OnGenerateCertificado">Generar PDF</button>
+</form>
+
+@code {
+    private string documento;
+    private string errorMessage;
+
+    private async Task OnGenerateCertificado()
+    {
+
+        if (!string.IsNullOrWhiteSpace(documento))
+        {
+            errorMessage = null;
+            var url = $"https://localhost:7118/api/CertificadoAlumnos/generarCertificado?documento={documento}";
+
+            var response = await Http.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var pdfData = await response.Content.ReadAsByteArrayAsync();
+                var base64Data = Convert.ToBase64String(pdfData);
+
+                // Llamada a JavaScript para descargar el archivo PDF
+                await JS.InvokeVoidAsync("downloadFileFromBase64", base64Data, "Certificado.pdf");
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                errorMessage = "Documento no encontrado en la base de datos.";
+            }
+            else
+            {
+                errorMessage = "Documento no encontrado en la base de datos.";
+            }
+
+        }
+        else
+        {
+            // Establece el mensaje de error si el campo está vacío
+            errorMessage = "Ingrese un documento válido.";
+        }
+
+
+    }
+}

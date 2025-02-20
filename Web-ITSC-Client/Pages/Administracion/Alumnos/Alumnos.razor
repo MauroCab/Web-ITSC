@@ -1,0 +1,435 @@
+﻿@page "/Administracion/CargaAlumnos"
+@inject IHttpServicios http
+@inject HttpClient _http
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+@using System.Net.Http.Json
+@using System.Text.RegularExpressions
+@using Web_ITSC_Shared.DTO
+
+<h3>Alumnos</h3>
+<button type="button" class="btn rounded-circle position-fixed"
+        style="width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; background-color: #00bfff; top: 60px; right: 20px; z-index: 9999;" @onclick="HandleValidSubmit">
+    <i class="bi bi-save" style="color: white; font-size: 30px;"></i> <!-- Ícono de guardar -->
+</button>
+<!-- Modal de éxito (se muestra cuando mostrarMensaje es true) -->
+@if (mostrarMensaje)
+{
+    <!-- Modal -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">¡Alumno guardado correctamente!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    El alumno se ha guardado correctamente.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<EditForm Model="crearAlumno" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <b>
+
+        <div class="form-group">
+            <label for="CarreraId">Carrera</label>
+            <InputSelect class="form-control" id="CarreraId" @bind-Value="crearAlumno.CarreraId">
+                <option value="">Seleccione...</option>
+                @foreach (var carrera in carreras)
+                {
+                    <option value="@carrera.Id">@carrera.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="Nombre">Nombre</label>
+            <InputText class="form-control" id="Nombre" @bind-Value="crearAlumno.Nombre" />
+        </div>
+
+        <div class="form-group">
+            <label for="Apellido">Apellido</label>
+            <InputText class="form-control" id="Apellido" @bind-Value="crearAlumno.Apellido" />
+        </div>
+
+        <div class="form-group">
+            <label for="Documento">Documento</label>
+            <InputText class="form-control" id="Documento" @bind-Value="crearAlumno.Documento" />
+        </div>
+
+        <div class="form-group">
+            <label for="TipoDocumentoId">Tipo de Documento</label>
+            <InputSelect class="form-control" id="TipoDocumentoId" @bind-Value="crearAlumno.TipoDocumentoId">
+                <option value="">Seleccione...</option>
+                @foreach (var tipo in tiposDocumentos)
+                {
+                    <option value="@tipo.Id">@tipo.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="Telefono">Teléfono</label>
+            <InputText class="form-control" id="Telefono" @bind-Value="crearAlumno.Telefono" />
+        </div>
+
+        <div class="form-group">
+            <label for="Domicilio">Domicilio</label>
+            <InputText class="form-control" id="Domicilio" @bind-Value="crearAlumno.Domicilio" />
+        </div>
+
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <InputText class="form-control" id="Email" @bind-Value="crearAlumno.Email" @onblur="AddGmailDomain" />
+        </div>
+
+        <div class="form-group">
+            <label for="Sexo">Sexo</label>
+            <InputText class="form-control" id="Sexo" @bind-Value="crearAlumno.Sexo" />
+        </div>
+
+        <div class="form-group">
+            <label for="FechaNacimiento">Fecha de Nacimiento</label>
+            <InputDate class="form-control" id="FechaNacimiento" @bind-Value="crearAlumno.FechaNacimiento" />
+        </div>
+
+        <div class="form-group">
+            <label for="PaisId">País</label>
+            <InputSelect class="form-control" id="PaisId"
+                         ValueExpression="@(() => crearAlumno.PaisId)"
+                         ValueChanged="@((int PaisId) => OnPaisChanged(PaisId))">
+                <option value="">Seleccione...</option>
+                @foreach (var pais in paises)
+                {
+                    <option value="@pais.Id">@pais.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="ProvinciaId">Provincia</label>
+            <InputSelect class="form-control" id="ProvinciaId"
+                         ValueExpression="@(() => crearAlumno.ProvinciaId)"
+                         ValueChanged="@((int ProvinciaId) => OnProvinciaChanged(ProvinciaId))">
+                <option value="">Seleccione...</option>
+                @foreach (var prov in provincia)
+                {
+                    <option value="@prov.Id">@prov.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="DepartamentoId">Departamento</label>
+            <InputSelect class="form-control" id="DepartamentoId"
+                         ValueExpression="@(() => crearAlumno.DepartamentoId)"
+                         ValueChanged="@((int DepartamentoId) => OnDepartamentoChanged(DepartamentoId))">
+                <option value="">Seleccione...</option>
+                @foreach (var depto in departamento)
+                {
+                    <option value="@depto.Id">@depto.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="LocalidadId">Localidad</label>
+            <InputSelect class="form-control" id="LocalidadId" @bind-Value="crearAlumno.LocalidadId">
+                <option value="">Seleccione...</option>
+                @foreach (var local in localidad)
+                {
+                    <option value="@local.Id">@local.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        @*  <____________________________________________________________________________________ *@
+
+        <div class="form-group">
+            <label for="CUIL">CUIL</label>
+            <InputText class="form-control" id="CUIL" @bind-Value="crearAlumno.CUIL" />
+        </div>
+
+        <div class="form-group">
+            <label for="Titulo Base">TituloBase</label>
+            <InputText class="form-control" id="CUIL" @bind-Value="crearAlumno.TituloBase" />
+        </div>
+
+        <!-- Modificación de los checkboxes -->
+        <div class="form-group">
+            <label for="TieneFotocopiaDNI">Fotocopia de DNI</label>
+            <InputCheckbox class="form-check-input" id="TieneFotocopiaDNI" @bind-Value="FotocopiaDNIBool" />
+        </div>
+
+        <div class="form-group">
+            <label for="TieneConstanciaCUIL">Constancia CUIL</label>
+            <InputCheckbox class="form-check-input" id="TieneConstanciaCUIL" @bind-Value="ConstanciaCUILBool" />
+        </div>
+
+        <div class="form-group">
+            <label for="TienePartidaNacimiento">Partida de Nacimiento</label>
+            <InputCheckbox class="form-check-input" id="TienePartidaNacimiento" @bind-Value="PartidaNacimientoBool" />
+        </div>
+
+        <div class="form-group">
+            <label for="TieneAnalitico">Analítico</label>
+            <InputCheckbox class="form-check-input" id="TieneAnalitico" @bind-Value="AnaliticoBool" />
+        </div>
+
+        <div class="form-group">
+            <label for="TieneFotoCarnet">Foto Carnet</label>
+            <InputCheckbox class="form-check-input" id="TieneFotoCarnet" @bind-Value="FotoCarnetBool" />
+        </div>
+
+        <div class="form-group">
+            <label for="TieneCUS">CUS</label>
+            <InputCheckbox class="form-check-input" id="TieneCUS" @bind-Value="CUSBool" />
+        </div>
+
+        @*  <div class="form-group">
+    <label for="Cohorte">Cohorte</label>
+    <InputNumber class="form-control" id="Edad" @bind-Value="crearAlumno.Cohorte" />
+    </div>   *@
+    </b>
+
+    <!-- Alerta de advertencia -->
+    @if (mostrarAdvertencia)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Advertencia:</strong> El CUIL no es válido o no coincide con el DNI.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Alerta de advertencia para DNI duplicado -->
+    @if (mostrarAdvertenciaDNI)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Advertencia:</strong> El DNI ya está registrado.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+
+
+</EditForm>
+
+@code {
+    private CrearAlumnoDTO crearAlumno = new CrearAlumnoDTO();
+    private List<TipoDocumento> tiposDocumentos = new List<TipoDocumento>();
+    private List<Pais> paises = new List<Pais>();
+    private List<Provincia> provincia = new List<Provincia>();
+    private List<Departamento> departamento = new List<Departamento>();
+    private List<Localidad> localidad = new List<Localidad>();
+    private List<Carrera> carreras = new List<Carrera>();
+    private bool mostrarMensaje = false;
+    private bool mostrarAdvertencia = false;
+    private bool mostrarAdvertenciaDNI = false;
+
+    // Este método se ejecuta al cargar la página
+    protected override async Task OnInitializedAsync()
+    {
+        tiposDocumentos = await _http.GetFromJsonAsync<List<TipoDocumento>>("api/TipoDocumento");
+        carreras = await _http.GetFromJsonAsync<List<Carrera>>("api/Carreras");
+        paises = await http.SelectPaisesAsync();
+        provincia = new List<Provincia>(); // Inicializar lista vacía
+        departamento = new List<Departamento>(); // Inicializar lista vacía
+        localidad = new List<Localidad>();
+    }
+
+    // Método que se ejecuta cuando el campo pierde el foco
+    private void AddGmailDomain()
+    {
+        if (!string.IsNullOrEmpty(crearAlumno.Email))
+        {
+            // Si el email no tiene un dominio, lo añadimos
+            if (!crearAlumno.Email.Contains("@"))
+            {
+                crearAlumno.Email = crearAlumno.Email + "@gmail.com";
+            }
+        }
+    }
+
+    private void OnPaisChanged(int paisId)
+    {
+        // Asignamos el nuevo PaisId a crearAlumno
+        crearAlumno.PaisId = paisId;
+        // Actualizamos las provincias basadas en el país seleccionado
+        ActualizarProvincias(paisId);
+    }
+
+    private void OnProvinciaChanged(int provinciaId)
+    {
+        // Asignamos el nuevo ProvinciaId a crearAlumno
+        crearAlumno.ProvinciaId = provinciaId;
+        // Actualizamos los departamentos basados en la provincia seleccionada
+        ActualizarDepartamentos(provinciaId);
+    }
+
+    private void OnDepartamentoChanged(int departamentoId)
+    {
+        // Asignamos el nuevo DepartamentoId a crearAlumno
+        crearAlumno.DepartamentoId = departamentoId;
+        // Actualizamos las localidades basadas en el departamento seleccionado
+        ActualizarLocalidades(departamentoId);
+    }
+
+    private async Task ActualizarProvincias(int PaisId)
+    {
+        Console.WriteLine($"Pais seleccionado: {PaisId}");
+        if (PaisId > 0)
+        {
+            // Actualiza la lista de provincias dependiendo del país seleccionado
+            provincia = await http.SelectProvinciasPorPaisAsync(PaisId);
+            // Si ya hay un valor seleccionado de provincia, asegúrate de que esté en la lista
+            if (crearAlumno.ProvinciaId != 0 && !provincia.Any(p => p.Id == crearAlumno.ProvinciaId))
+            {
+                crearAlumno.ProvinciaId = 0; // Resetea la provincia si no está en la nueva lista
+            }
+            StateHasChanged(); // Para actualizar la UI
+        }
+    }
+
+    private async Task ActualizarDepartamentos(int ProvinciaId)
+    {
+        Console.WriteLine($"Provincia seleccionada: {ProvinciaId}");
+        if (ProvinciaId > 0)
+        {
+            // Actualiza la lista de departamentos dependiendo de la provincia seleccionada
+            departamento = await http.SelectDepartamentosPorProvinciaAsync(ProvinciaId);
+            // Si ya hay un valor seleccionado de departamento, asegúrate de que esté en la lista
+            if (crearAlumno.DepartamentoId != 0 && !departamento.Any(d => d.Id == crearAlumno.DepartamentoId))
+            {
+                crearAlumno.DepartamentoId = 0; // Resetea el departamento si no está en la nueva lista
+            }
+            StateHasChanged(); // Actualiza la UI
+        }
+    }
+
+    private async Task ActualizarLocalidades(int DepartamentoId)
+    {
+        Console.WriteLine($"Departamento seleccionado: {DepartamentoId}");
+        if (DepartamentoId > 0)
+        {
+            // Actualiza la lista de localidades dependiendo del departamento seleccionado
+            localidad = await http.SelectLocalidadesPorDepartamentoAsync(DepartamentoId);
+            // Si ya hay un valor seleccionado de localidad, asegúrate de que esté en la lista
+            if (crearAlumno.LocalidadId != 0 && !localidad.Any(l => l.Id == crearAlumno.LocalidadId))
+            {
+                crearAlumno.LocalidadId = 0; // Resetea la localidad si no está en la nueva lista
+            }
+            StateHasChanged(); // Actualiza la UI
+        }
+    }
+
+    // Propiedades booleanas que se vinculan con los checkboxes
+    private bool FotocopiaDNIBool
+    {
+        get => crearAlumno.FotocopiaDNI == "Sí";
+        set => crearAlumno.FotocopiaDNI = value ? "Sí" : "No";
+    }
+
+    private bool ConstanciaCUILBool
+    {
+        get => crearAlumno.ConstanciaCUIL == "Sí";
+        set => crearAlumno.ConstanciaCUIL = value ? "Sí" : "No";
+    }
+
+    private bool PartidaNacimientoBool
+    {
+        get => crearAlumno.PartidaNacimiento == "Sí";
+        set => crearAlumno.PartidaNacimiento = value ? "Sí" : "No";
+    }
+
+    private bool AnaliticoBool
+    {
+        get => crearAlumno.Analitico == "Sí";
+        set => crearAlumno.Analitico = value ? "Sí" : "No";
+    }
+
+    private bool FotoCarnetBool
+    {
+        get => crearAlumno.FotoCarnet == "Sí";
+        set => crearAlumno.FotoCarnet = value ? "Sí" : "No";
+    }
+
+    private bool CUSBool
+    {
+        get => crearAlumno.CUS == "Sí";
+        set => crearAlumno.CUS = value ? "Sí" : "No";
+    }
+
+    // Este método se ejecuta cuando el formulario es enviado y válido
+    private async Task HandleValidSubmit()
+    {
+        Console.WriteLine($"PaisId: {crearAlumno.PaisId}, ProvinciaId: {crearAlumno.ProvinciaId}, DepartamentoId: {crearAlumno.DepartamentoId}, LocalidadId: {crearAlumno.LocalidadId}");
+
+        mostrarAdvertencia = false;
+        mostrarAdvertenciaDNI = false;
+
+        if (!ValidarCUIL(crearAlumno.CUIL, crearAlumno.Documento))
+        {
+            mostrarAdvertencia = true;
+            return;
+        }
+
+        try
+        {
+            var response = await _http.PostAsJsonAsync("api/Alumnos", crearAlumno);
+            if (response.IsSuccessStatusCode)
+            {
+                mostrarMensaje = true;
+                StateHasChanged(); // Forzar la actualización de la UI.
+                                   // Mostrar modal con JSRuntime si estás usando Bootstrap.
+                await JSRuntime.InvokeVoidAsync("openModal");
+                Navigation.NavigateTo("/Administracion/ListaAlumnos");
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                if (errorMessage.Contains("El DNI ya está registrado"))
+                {
+                    mostrarAdvertenciaDNI = true;
+                }
+                Console.WriteLine($"Error: {errorMessage}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+    }
+
+    private bool ValidarCUIL(string cuil, string dni)
+    {
+        var regex = new Regex(@"^\d{2}-\d{8}-\d{1}$");
+        if (!regex.IsMatch(cuil))
+        {
+            return false;
+        }
+
+        var partes = cuil.Split('-');
+        if (partes[1] != dni)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private async Task CerrarModal()
+    {
+        await JSRuntime.InvokeVoidAsync("closeModal");
+    }
+}
+
+
