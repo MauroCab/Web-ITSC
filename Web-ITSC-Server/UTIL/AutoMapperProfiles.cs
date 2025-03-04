@@ -179,7 +179,7 @@ namespace Web_ITSC_Server.UTIL
             CreateMap<CrearPlanEstudioDTO, PlanEstudio>();
             CreateMap<CrearProfesorDTO, Profesor>();
             CreateMap<CrearTurnoDTO, Turno>();
-
+            CreateMap<CrearCertificadoAlumnoDTO, CertificadoAlumno>();
         }
     }
 }

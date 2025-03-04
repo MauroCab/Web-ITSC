@@ -28,7 +28,7 @@
         if (!string.IsNullOrWhiteSpace(documento))
         {
             errorMessage = null;
-            var url = $"https://localhost:7118/api/CertificadoAlumnos/generarCertificado?documento={documento}";
+            var url = $"https://localhost:7262/api/CertificadoAlumnos/generarCertificado?documento={documento}";
 
             var response = await Http.GetAsync(url);
 

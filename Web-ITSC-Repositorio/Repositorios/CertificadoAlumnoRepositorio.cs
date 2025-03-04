@@ -17,6 +17,7 @@ using Web_ITSC_Repositorio.Repositorios.Genericos;
 using Web_ITSC_Shared.DTO;
 using Microsoft.EntityFrameworkCore;
 using iText.Layout.Properties;
+using iText.Kernel.Font;
 
 namespace Web_ITSC_Repositorio.Repositorios
 {
@@ -38,7 +39,7 @@ namespace Web_ITSC_Repositorio.Repositorios
                 TipoDocumentoCertificado = a.Usuario.Persona.TipoDocumento.Nombre,
                 NroDocumento = a.Usuario.Persona.Documento,
                 FechadeNacimiento = DateOnly.FromDateTime(a.FechaNacimiento),
-                LugarNacimiento = a.Departamento + " " + a.Provincia + " " + a.Pais,
+                LugarNacimiento = a.Departamento.Nombre + " " + a.Provincia.Nombre + " " + a.Pais.Nombre,
                 NroTelefono = a.Usuario.Persona.Telefono,
                 TituloHabilitante = a.TituloBase,
                 Legajo = context.InscripcionesCarrera
@@ -96,6 +97,20 @@ namespace Web_ITSC_Repositorio.Repositorios
 
         }
 
+        #region Fuentes Personalizadas
+        // Ruta a las fuentes en Windows
+        static string fontPathTahoma = @"C:\Windows\Fonts\tahoma.ttf";
+        static string fontPathTimesNewRoman = @"C:\Windows\Fonts\times.ttf";
+        static string fontPathVerdana = @"C:\Windows\Fonts\verdana.ttf";
+        static string fontPathArialMT = @"C:\Windows\Fonts\arial.ttf"; // Arial MT es Arial en Windows
+
+        // Cargar fuentes personalizadas
+        static PdfFont tahomaFont = PdfFontFactory.CreateFont(fontPathTahoma, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+        static PdfFont timesNewRomanFont = PdfFontFactory.CreateFont(fontPathTimesNewRoman, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+        static PdfFont verdanaFont = PdfFontFactory.CreateFont(fontPathVerdana, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+        static PdfFont arialMTFont = PdfFontFactory.CreateFont(fontPathArialMT, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+
+        #endregion
         public byte[] GenerarCertificadoPDF(GetDatosCertificadosDTO datos)
         {
             using (var stream = new MemoryStream())
@@ -104,65 +119,126 @@ namespace Web_ITSC_Repositorio.Repositorios
                 var pdf = new PdfDocument(writer);
                 var document = new iText.Layout.Document(pdf);
 
+                
                 // Título
-                document.Add(new Paragraph("Certificado de Estudios")
-                                .SetFontSize(20)
+                document.Add(new Paragraph("REPUBLICA ARGENTINA")
+                                .SetFont(tahomaFont)
+                                .SetFontSize(6.5f)
                                 .SimulateBold()
                                 .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("LEY DE EDUCACION NACIONAL Nº 26.206")
+                            .SetFont(tahomaFont)
+                            .SetFontSize(6.5f)
+                            .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("MINISTERIO DE EDUCACION DE LA PROVINCIA DE CORDOBA")
+                                .SetFont(tahomaFont)
+                                .SetFontSize(6.5f)
+                                .SimulateBold()
+                                .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("LEY DE EDUCACION PROVINCIAL N.º 8113")
+                            .SetFont(tahomaFont)
+                            .SetFontSize(6.5f)
+                            .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("DIRECCION GENERAL DE EDUCACION TÉCNICA Y FORMACIÓN PROFESIONAL")
+                                .SetFont(tahomaFont)
+                                .SetFontSize(6.5f)
+                                .SimulateBold()
+                                .SetTextAlignment(TextAlignment.CENTER));
+
+                document.Add(new Paragraph("Instituto Técnico Superior Córdoba")
+                            .SetFont(timesNewRomanFont)
+                            .SetFontSize(15.5f)
+                            .SetTextAlignment(TextAlignment.CENTER)
+                            .SetFontColor(ColorConstants.CYAN));
+
+                document.Add(new Paragraph("Tecnicatura Superior en Desarrollo de Software")
+                            .SetFont(timesNewRomanFont)
+                            .SetFontSize(15.5f)
+                            .SetTextAlignment(TextAlignment.CENTER)
+                            .SetFontColor(ColorConstants.RED)); 
+
+                document.Add(new Paragraph("CERTIFICADO MATERIAS APROBADAS - ESTUDIANTE REGULAR")
+                                .SetFont(verdanaFont)
+                                .SetFontSize(7)
+                                .SimulateBold()
+                                .SetTextAlignment(TextAlignment.CENTER));
+
 
                 // Datos del alumno
                 if (datos != null)
                 {
-                    document.Add(new Paragraph($"Nombre: {datos.ApellidoyNombre}")
-                                    .SetFontSize(12)
-                                    .SetTextAlignment(TextAlignment.LEFT));
-                    document.Add(new Paragraph($"Tipo de Documento: {datos.TipoDocumentoCertificado}")
-                                    .SetFontSize(12));
-                    document.Add(new Paragraph($"Nro Documento: {datos.NroDocumento}")
-                                    .SetFontSize(12));
-                    document.Add(new Paragraph($"Fecha de Nacimiento: {datos.FechadeNacimiento}")
-                                    .SetFontSize(12));
-                    document.Add(new Paragraph($"Lugar de Nacimiento: {datos.LugarNacimiento}")
-                                    .SetFontSize(12));
-                    document.Add(new Paragraph($"Teléfono: {datos.NroTelefono}")
-                                    .SetFontSize(12));
-                    document.Add(new Paragraph($"Título Habilitante: {datos.TituloHabilitante}")
-                                    .SetFontSize(12));
-                    document.Add(new Paragraph($"Legajo: {datos.Legajo}")
-                                    .SetFontSize(12));
-                    document.Add(new Paragraph($"Libro Matriz: {datos.LibroMatriz}")
-                                    .SetFontSize(12));
-                    document.Add(new Paragraph($"Fecha de Emisión: {datos.Fecha}")
-                                    .SetFontSize(12));
+                    #region Tabla Datos Alumno
+                    Table tablaDatos = new Table(4).UseAllAvailableWidth();
 
-                    // Agregar espacio antes de la tabla
-                    document.Add(new Paragraph(" "));
+                    // Agregar filas con datos
+                    tablaDatos.AddCell(GetCell("Apellido y Nombre:", true));
+                    tablaDatos.AddCell(GetCell($"{datos.ApellidoyNombre}"));
+                    tablaDatos.AddCell(GetCell("Legajo:", true));
+                    tablaDatos.AddCell(GetCell($"{datos.Legajo}"));
+
+                    tablaDatos.AddCell(GetCell("Tipo Doc.:", true));
+                    tablaDatos.AddCell(GetCell($"{datos.TipoDocumentoCertificado}"));
+                    tablaDatos.AddCell(GetCell("Nro. Doc.:", true));
+                    tablaDatos.AddCell(GetCell($"{datos.NroDocumento}"));
+
+                    tablaDatos.AddCell(GetCell("Fecha de Nacimiento:", true));
+                    tablaDatos.AddCell(GetCell($"{datos.FechadeNacimiento}"));
+                    tablaDatos.AddCell(GetCell("Libro Matriz:", true));
+                    tablaDatos.AddCell(GetCell($"{datos.LibroMatriz}"));
+
+                    tablaDatos.AddCell(GetCell("Lugar de Nacimiento:", true));
+                    tablaDatos.AddCell(GetCell($"{datos.LugarNacimiento}"));
+                    tablaDatos.AddCell(GetCell("Folio:", true));
+                    tablaDatos.AddCell(GetCell($"{datos.Folio}"));
+
+                    tablaDatos.AddCell(GetCell("Teléfono:", true));
+                    tablaDatos.AddCell(GetCell($"{datos.NroTelefono}"));
+                    tablaDatos.AddCell(new Cell(1, 2).SetBorder(Border.NO_BORDER)); // Celda vacía sin bordes
+
+                    tablaDatos.AddCell(GetCell("Título Habilitante:", true));
+                    tablaDatos.AddCell(GetCell($"{datos.TituloHabilitante}"));
+                    tablaDatos.AddCell(new Cell(1, 2).SetBorder(Border.NO_BORDER)); // Celda vacía sin bordes
+
+
+                    #endregion
+
+                    // Agrega la tabla de datos del alumno al PDF
+                    document.Add(tablaDatos);
+
+                    document.Add(new Paragraph("Certifico que el/la estudiante mencionado/a cursa en carácter de REGULAR, la Tecnicatura Superior en Desarrollo de Software (Res 462/12)  y ha aprobado los espacios curriculares que se detallan a continuación:")
+                                .SetFont(tahomaFont)
+                                .SetFontSize(5)
+                                .SetTextAlignment(TextAlignment.CENTER));
 
                     // Tabla de materias
-                    iText.Layout.Element.Table table = new iText.Layout.Element.Table(8).UseAllAvailableWidth(); // 8 columnas para la tabla de materias
-                    table.AddHeaderCell(new Cell().Add(new Paragraph("Asignatura").SimulateBold()));
-                    table.AddHeaderCell(new Cell().Add(new Paragraph("Valor Nota").SimulateBold()));
-                    table.AddHeaderCell(new Cell().Add(new Paragraph("Nota Letra").SimulateBold()));
-                    table.AddHeaderCell(new Cell().Add(new Paragraph("Libro").SimulateBold()));
-                    table.AddHeaderCell(new Cell().Add(new Paragraph("Folio").SimulateBold()));
-                    table.AddHeaderCell(new Cell().Add(new Paragraph("Fecha").SimulateBold()));
-                    table.AddHeaderCell(new Cell().Add(new Paragraph("Condición Actual").SimulateBold()));
-                    table.AddHeaderCell(new Cell().Add(new Paragraph("Sede").SimulateBold()));
+                    iText.Layout.Element.Table tablaNotas = new iText.Layout.Element.Table(8).UseAllAvailableWidth(); // 8 columnas para la tabla de materias
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Asignatura").SimulateBold()));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Valor Nota").SimulateBold()));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Nota Letra").SimulateBold()));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Libro").SimulateBold()));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Folio").SimulateBold()));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Fecha").SimulateBold()));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Condición Actual").SimulateBold()));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Sede").SimulateBold()));
 
-                    // Filas de la tabla
+                    // Filas de la tabla de las condicion de cada materia
                     foreach (var fila in datos.FilasTabla)
                     {
-                        table.AddCell(new Cell().Add(new Paragraph(fila.Asignatura)));
-                        table.AddCell(new Cell().Add(new Paragraph(fila.ValorNota.ToString())));
-                        table.AddCell(new Cell().Add(new Paragraph(fila.NotaLetra)));
-                        table.AddCell(new Cell().Add(new Paragraph(fila.Libro)));
-                        table.AddCell(new Cell().Add(new Paragraph(fila.Folio)));
-                        table.AddCell(new Cell().Add(new Paragraph($"{fila.Dia}/{fila.Mes}/{fila.Anno}")));
-                        table.AddCell(new Cell().Add(new Paragraph(fila.CondicionActual)));
-                        table.AddCell(new Cell().Add(new Paragraph(fila.Sede)));
+                        tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.Asignatura)));
+                        tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.ValorNota.ToString())));
+                        tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.NotaLetra)));
+                        tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.Libro)));
+                        tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.Folio)));
+                        tablaNotas.AddCell(new Cell().Add(new Paragraph($"{fila.Dia}/{fila.Mes}/{fila.Anno}")));
+                        tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.CondicionActual)));
+                        tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.Sede)));
                     }
 
-                    document.Add(table);
+                    document.Add(tablaNotas);
 
                     document.Close();
                     return stream.ToArray();
@@ -178,6 +254,17 @@ namespace Web_ITSC_Repositorio.Repositorios
         {
             Alumno sel = await context.Alumnos.FirstOrDefaultAsync(x => x.Usuario.Persona.Documento == documento);
             return sel;
+        }
+
+        static Cell GetCell(string text, bool bold = false)
+        {
+            Cell cell = new Cell().Add(new Paragraph(text)
+                                .SetFont(verdanaFont)
+                                .SetFontSize(5.5f));
+            if (bold) cell.SimulateBold();
+
+            cell.SetBorder(Border.NO_BORDER);
+            return cell;
         }
 
         private static string NumeroANombre(int numero)
