@@ -244,7 +244,7 @@ namespace Web_ITSC_Repositorio.Repositorios
                         tablaNotas.AddCell(GetCell(fila.Asignatura, verdanaFont, 6.5f));
                         tablaNotas.AddCell(GetCell(fila.ValorNota.ToString(), verdanaFont, 6.5f));
                         tablaNotas.AddCell(GetCell(fila.NotaLetra, verdanaFont, 6.5f));
-                        tablaNotas.AddCell(GetCell(fila.Libro, verdanaFont, 6.5f));
+                        tablaNotas.AddCell(GetCell(fila.Libro, verdanaFont, 6.5f)); 
                         tablaNotas.AddCell(GetCell(fila.Folio, verdanaFont, 6.5f));
                         tablaNotas.AddCell(GetCell($"{fila.Dia}", verdanaFont, 6.5f));
                         tablaNotas.AddCell(GetCell($"{fila.Mes}", verdanaFont, 6.5f));
