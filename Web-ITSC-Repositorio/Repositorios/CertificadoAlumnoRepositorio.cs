@@ -174,27 +174,27 @@ namespace Web_ITSC_Repositorio.Repositorios
                     Table tablaDatos = new Table(4).UseAllAvailableWidth();
 
                     // Agregar filas con datos
-                    tablaDatos.AddCell(GetCell("Apellido y Nombre:", verdanaFont, 5.5f, true));
+                    tablaDatos.AddCell(GetCell("Apellido y Nombre:", verdanaFont, 5.5f, false, true));
                     tablaDatos.AddCell(GetCell($"{datos.ApellidoyNombre}", verdanaFont, 5.5f));
-                    tablaDatos.AddCell(GetCell("Legajo:", verdanaFont, 5.5f, true));
+                    tablaDatos.AddCell(GetCell("Legajo:", verdanaFont, 5.5f, false, true));
                     tablaDatos.AddCell(GetCell($"{datos.Legajo}", verdanaFont, 5.5f));
 
-                    tablaDatos.AddCell(GetCell("Tipo Doc.:", verdanaFont, 5.5f, true));
+                    tablaDatos.AddCell(GetCell("Tipo Doc.:", verdanaFont, 5.5f, false, true));
                     tablaDatos.AddCell(GetCell($"{datos.TipoDocumentoCertificado}", verdanaFont, 5.5f));
-                    tablaDatos.AddCell(GetCell("Nro. Doc.:", verdanaFont, 5.5f, true));
+                    tablaDatos.AddCell(GetCell("Nro. Doc.:", verdanaFont, 5.5f, false, true));
                     tablaDatos.AddCell(GetCell($"{datos.NroDocumento}", verdanaFont, 5.5f));
 
-                    tablaDatos.AddCell(GetCell("Fecha de Nacimiento:", verdanaFont, 5.5f, true));
+                    tablaDatos.AddCell(GetCell("Fecha de Nacimiento:", verdanaFont, 5.5f, false, true));
                     tablaDatos.AddCell(GetCell($"{datos.FechadeNacimiento}", verdanaFont, 5.5f));
-                    tablaDatos.AddCell(GetCell("Libro Matriz:", verdanaFont, 5.5f, true));
+                    tablaDatos.AddCell(GetCell("Libro Matriz:", verdanaFont, 5.5f, false, true));
                     tablaDatos.AddCell(GetCell($"{datos.LibroMatriz}", verdanaFont, 5.5f));
 
-                    tablaDatos.AddCell(GetCell("Lugar de Nacimiento:", verdanaFont, 5.5f, true));
+                    tablaDatos.AddCell(GetCell("Lugar de Nacimiento:", verdanaFont, 5.5f, false, true));
                     tablaDatos.AddCell(GetCell($"{datos.LugarNacimiento}", verdanaFont, 5.5f));
-                    tablaDatos.AddCell(GetCell("Folio:", verdanaFont, 5.5f, true));
+                    tablaDatos.AddCell(GetCell("Folio:", verdanaFont, 5.5f, false, true));
                     tablaDatos.AddCell(GetCell($"{datos.Folio}", verdanaFont, 5.5f));
 
-                    tablaDatos.AddCell(GetCell("Teléfono:", verdanaFont, 5.5f, true));
+                    tablaDatos.AddCell(GetCell("Teléfono:", verdanaFont, 5.5f, false, true));
                     tablaDatos.AddCell(GetCell($"{datos.NroTelefono}", verdanaFont, 5.5f));
                     tablaDatos.AddCell(new Cell(1, 2).SetBorder(Border.NO_BORDER)); // Celda vacía sin bordes
 
@@ -217,51 +217,44 @@ namespace Web_ITSC_Repositorio.Repositorios
                     Table tablaNotas = new Table(10).UseAllAvailableWidth();
 
                     #region Tablas Encabezado
-                    tablaNotas.AddHeaderCell(new Cell(1, 9).Add(new Paragraph("CALIFICACIONES")));
-                    tablaNotas.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Establecimiento")));
+                    
+                    tablaNotas.AddHeaderCell(new Cell(1, 9).Add(new Paragraph("CALIFICACIONES").SetFont(verdanaFont).SetFontSize(6.5f).SetHorizontalAlignment(HorizontalAlignment.CENTER)));
+                    tablaNotas.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Establecimiento").SetFont(verdanaFont).SetFontSize(6.5f)));
 
-                    tablaNotas.AddHeaderCell(new Cell(2, 1).Add(new Paragraph("ASIGNATURAS").SimulateBold()));
-                    tablaNotas.AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Nota").SimulateBold()));
-                    tablaNotas.AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Acta").SimulateBold()));
-                    tablaNotas.AddHeaderCell(new Cell(1, 3).Add(new Paragraph("Aprobado el:").SimulateBold()));
-                    tablaNotas.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Condicion")));
-                    tablaNotas.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Sede").SimulateBold()));
+                    tablaNotas.AddHeaderCell(new Cell(2, 1).Add(new Paragraph("ASIGNATURAS").SimulateBold().SetFont(verdanaFont).SetFontSize(6.5f).SetHorizontalAlignment(HorizontalAlignment.CENTER)));
+                    tablaNotas.AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Nota").SimulateBold().SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell(1, 2).Add(new Paragraph("Acta").SimulateBold().SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell(1, 3).Add(new Paragraph("Aprobado el:").SimulateBold().SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Condicion").SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell(1, 1).Add(new Paragraph("Sede").SimulateBold().SetFont(verdanaFont).SetFontSize(6.5f)));
 
-                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Número")));
-                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Letras")));
-                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Libro")));
-                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Folio")));
-                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Día")));
-                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Mes")));
-                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Año")));
-                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Reg/Prom/Libre")));
-                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("CENTRAL/NORTE")));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Número").SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Letras").SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Libro").SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Folio").SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Día").SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Mes").SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Año").SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("Reg/Prom/Libre").SetFont(verdanaFont).SetFontSize(6.5f)));
+                    tablaNotas.AddHeaderCell(new Cell().Add(new Paragraph("CENTRAL/NORTE").SetFont(verdanaFont).SetFontSize(6.5f)));
                     #endregion
+
 
                     // Filas de la tabla de las condicion de cada materia
                     foreach (var fila in datos.FilasTabla)
                     {
-                        tablaNotas.AddCell(GetCell(fila.Asignatura, verdanaFont, 6.5f));
-                        tablaNotas.AddCell(GetCell(fila.ValorNota.ToString(), verdanaFont, 6.5f));
-                        tablaNotas.AddCell(GetCell(fila.NotaLetra, verdanaFont, 6.5f));
-                        tablaNotas.AddCell(GetCell(fila.Libro, verdanaFont, 6.5f)); 
-                        tablaNotas.AddCell(GetCell(fila.Folio, verdanaFont, 6.5f));
-                        tablaNotas.AddCell(GetCell($"{fila.Dia}", verdanaFont, 6.5f));
-                        tablaNotas.AddCell(GetCell($"{fila.Mes}", verdanaFont, 6.5f));
-                        tablaNotas.AddCell(GetCell($"{fila.Anno}", verdanaFont, 6.5f));
-                        tablaNotas.AddCell(GetCell(fila.CondicionActual, verdanaFont, 6.5f));
-                        tablaNotas.AddCell(GetCell(fila.Sede, verdanaFont, 6.5f));
+                        tablaNotas.AddCell(GetCell(fila.Asignatura, verdanaFont, 6.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.ValorNota.ToString(), verdanaFont, 6.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.NotaLetra, verdanaFont, 6.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.Libro, verdanaFont, 6.5f, true)); 
+                        tablaNotas.AddCell(GetCell(fila.Folio, verdanaFont, 6.5f, true));
+                        tablaNotas.AddCell(GetCell($"{fila.Dia}", verdanaFont, 6.5f, true));
+                        tablaNotas.AddCell(GetCell($"{fila.Mes}", verdanaFont, 6.5f, true));
+                        tablaNotas.AddCell(GetCell($"{fila.Anno}", verdanaFont, 6.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.CondicionActual, verdanaFont, 6.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.Sede, verdanaFont, 6.5f, true));
 
-                        //tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.Asignatura)));
-                        //tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.ValorNota.ToString())));
-                        //tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.NotaLetra)));
-                        //tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.Libro)));
-                        //tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.Folio)));
-                        //tablaNotas.AddCell(new Cell().Add(new Paragraph($"{fila.Dia}")));
-                        //tablaNotas.AddCell(new Cell().Add(new Paragraph($"{fila.Mes}")));
-                        //tablaNotas.AddCell(new Cell().Add(new Paragraph($"{fila.Anno}")));
-                        //tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.CondicionActual)));
-                        //tablaNotas.AddCell(new Cell().Add(new Paragraph(fila.Sede)));
+                        
                     }
 
                     document.Add(tablaNotas);
@@ -281,15 +274,19 @@ namespace Web_ITSC_Repositorio.Repositorios
             Alumno sel = await context.Alumnos.FirstOrDefaultAsync(x => x.Usuario.Persona.Documento == documento);
             return sel;
         }
-
-        static Cell GetCell(string text, PdfFont fuente, float size, bool bold = false)
+        
+        static Cell GetCell(string text, PdfFont fuente, float size, bool border = false, bool bold = false)
         {
             Cell cell = new Cell().Add(new Paragraph(text)
                                 .SetFont(fuente)
                                 .SetFontSize(size));
             if (bold) cell.SimulateBold();
 
-            cell.SetBorder(Border.NO_BORDER);
+            if (border)
+                cell.SetBorder(new SolidBorder(1));
+            else
+                cell.SetBorder(Border.NO_BORDER);
+
             return cell;
         }
 
