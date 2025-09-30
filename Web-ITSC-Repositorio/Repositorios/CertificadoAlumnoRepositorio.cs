@@ -120,7 +120,7 @@ namespace Web_ITSC_Repositorio.Repositorios
                 PdfFont verdanaFont = PdfFontFactory.CreateFont(fontPathVerdana, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
                 PdfFont arialMTFont = PdfFontFactory.CreateFont(fontPathArialMT, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
 
-                
+
                 string rutaEscudo = Path.Combine(AppContext.BaseDirectory, "DocImages", "Escudo.png");
                 string rutaLogo = Path.Combine(AppContext.BaseDirectory, "DocImages", "LogoIT.png");
 
@@ -143,7 +143,7 @@ namespace Web_ITSC_Repositorio.Repositorios
                                 .SetTextAlignment(TextAlignment.RIGHT));
                 //Imágenes
 
-                // Crear tabla con 3 columnas para el header
+                #region Logo y Escudo
                 float[] columnWidths = { 50f, 30f, 30f }; // Porcentajes
                 Table headerTable = new Table(UnitValue.CreatePercentArray(columnWidths))
                     .UseAllAvailableWidth();
@@ -152,7 +152,8 @@ namespace Web_ITSC_Repositorio.Repositorios
                 Cell logoCell = new Cell()
                     .Add(imgLogo)
                     .SetBorder(Border.NO_BORDER)
-                    .SetTextAlignment(TextAlignment.LEFT);
+                    .SetTextAlignment(TextAlignment.LEFT)
+                    .SetVerticalAlignment(VerticalAlignment.MIDDLE);
 
                 // Escudo en la columna central
                 Cell escudoCell = new Cell()
@@ -171,48 +172,66 @@ namespace Web_ITSC_Repositorio.Repositorios
                 headerTable.AddCell(emptyCell);    // Columna 3: Vacía
 
                 document.Add(headerTable);
-                //document.Add(imgLogo);
-                //document.Add(imgEscudo);
+
+                #endregion
+
                 // Título
+
+                #region Encabezados 
                 document.Add(new Paragraph("REPUBLICA ARGENTINA")
                                 .SetFont(tahomaFont)
                                 .SetFontSize(6.5f)
                                 .SimulateBold()
+                                .SetMarginTop(0)
+                                .SetMarginBottom(0)
                                 .SetTextAlignment(TextAlignment.CENTER));
 
                 document.Add(new Paragraph("LEY DE EDUCACION NACIONAL Nº 26.206")
                             .SetFont(tahomaFont)
                             .SetFontSize(6.5f)
+                            .SetMarginTop(0)
+                            .SetMarginBottom(0)
                             .SetTextAlignment(TextAlignment.CENTER));
 
                 document.Add(new Paragraph("MINISTERIO DE EDUCACION DE LA PROVINCIA DE CORDOBA")
                                 .SetFont(tahomaFont)
                                 .SetFontSize(6.5f)
                                 .SimulateBold()
+                                .SetMarginTop(0)
+                                .SetMarginBottom(0)
                                 .SetTextAlignment(TextAlignment.CENTER));
 
                 document.Add(new Paragraph("LEY DE EDUCACION PROVINCIAL N.º 8113")
                             .SetFont(tahomaFont)
                             .SetFontSize(6.5f)
+                            .SetMarginTop(0)
+                            .SetMarginBottom(0)
                             .SetTextAlignment(TextAlignment.CENTER));
 
                 document.Add(new Paragraph("DIRECCION GENERAL DE EDUCACION TÉCNICA Y FORMACIÓN PROFESIONAL")
                                 .SetFont(tahomaFont)
                                 .SetFontSize(6.5f)
                                 .SimulateBold()
+                                .SetMarginTop(0)
+                                .SetMarginBottom(0)//---
                                 .SetTextAlignment(TextAlignment.CENTER));
 
                 document.Add(new Paragraph("Instituto Técnico Superior Córdoba")
                             .SetFont(timesNewRomanFont)
                             .SetFontSize(15.5f)
+                            .SetMarginBottom(0)
                             .SetTextAlignment(TextAlignment.CENTER)
                             .SetFontColor(ColorConstants.BLUE));
 
                 document.Add(new Paragraph("Tecnicatura Superior en Desarrollo de Software")
                             .SetFont(timesNewRomanFont)
                             .SetFontSize(15.5f)
+                            .SetMarginTop(0)
+                            .SetMarginBottom(0)
                             .SetTextAlignment(TextAlignment.CENTER)
                             .SetFontColor(ColorConstants.RED));
+
+#endregion
 
                 LineSeparator ls = new LineSeparator(new SolidLine());
                 ls.SetWidth(UnitValue.CreatePercentValue(100)); // Ancho al 100% de la página
