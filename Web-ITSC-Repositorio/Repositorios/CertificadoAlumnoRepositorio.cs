@@ -107,7 +107,7 @@ namespace Web_ITSC_Repositorio.Repositorios
                 var pdf = new PdfDocument(writer);
                 var document = new Document(pdf);
 
-                #region Fuentes Personalizadas
+                #region Fuentes e imágenes Personalizadas
                 // Ruta a las fuentes en Windows
                 string fontPathTahoma = @"C:\Windows\Fonts\tahoma.ttf";
                 string fontPathTimesNewRoman = @"C:\Windows\Fonts\times.ttf";
@@ -120,18 +120,59 @@ namespace Web_ITSC_Repositorio.Repositorios
                 PdfFont verdanaFont = PdfFontFactory.CreateFont(fontPathVerdana, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
                 PdfFont arialMTFont = PdfFontFactory.CreateFont(fontPathArialMT, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
 
-                #endregion
+                
                 string rutaEscudo = Path.Combine(AppContext.BaseDirectory, "DocImages", "Escudo.png");
                 string rutaLogo = Path.Combine(AppContext.BaseDirectory, "DocImages", "LogoIT.png");
 
                 ImageData imageDataLogo = ImageDataFactory.Create(rutaLogo);
-                Image imgLogo = new Image(imageDataLogo).SetAutoScale(true);
-                document.Add(imgLogo);
+                Image imgLogo = new Image(imageDataLogo).SetWidth(40);
+
+
+
 
                 ImageData imageDataEscudo = ImageDataFactory.Create(rutaEscudo);
-                Image imgEscudo = new Image(imageDataEscudo).SetAutoScale(true);
-                document.Add(imgEscudo);
+                Image imgEscudo = new Image(imageDataEscudo).SetWidth(40);
 
+
+
+                #endregion
+                //Fecha
+                document.Add(new Paragraph($"Córdoba, {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}")
+                                .SetFont(tahomaFont)
+                                .SetFontSize(4.5f)
+                                .SetTextAlignment(TextAlignment.RIGHT));
+                //Imágenes
+
+                // Crear tabla con 3 columnas para el header
+                float[] columnWidths = { 50f, 30f, 30f }; // Porcentajes
+                Table headerTable = new Table(UnitValue.CreatePercentArray(columnWidths))
+                    .UseAllAvailableWidth();
+
+                // Logo en la columna izquierda
+                Cell logoCell = new Cell()
+                    .Add(imgLogo)
+                    .SetBorder(Border.NO_BORDER)
+                    .SetTextAlignment(TextAlignment.LEFT);
+
+                // Escudo en la columna central
+                Cell escudoCell = new Cell()
+                    .Add(imgEscudo)
+                    .SetBorder(Border.NO_BORDER)
+                    .SetTextAlignment(TextAlignment.CENTER);
+
+                // Celda vacía en la columna derecha
+                Cell emptyCell = new Cell()
+                    .SetBorder(Border.NO_BORDER)
+                    .Add(new Paragraph(""));
+
+                // Agregar celdas a la tabla
+                headerTable.AddCell(logoCell);     // Columna 1: Logo izquierda
+                headerTable.AddCell(escudoCell);   // Columna 2: Escudo centro  
+                headerTable.AddCell(emptyCell);    // Columna 3: Vacía
+
+                document.Add(headerTable);
+                //document.Add(imgLogo);
+                //document.Add(imgEscudo);
                 // Título
                 document.Add(new Paragraph("REPUBLICA ARGENTINA")
                                 .SetFont(tahomaFont)
@@ -215,7 +256,7 @@ namespace Web_ITSC_Repositorio.Repositorios
                     tablaDatos.AddCell(GetCell($"{datos.NroTelefono}", verdanaFont, 5.5f));
                     tablaDatos.AddCell(new Cell(1, 2).SetBorder(Border.NO_BORDER)); // Celda vacía sin bordes
 
-                    tablaDatos.AddCell(GetCell("Título Habilitante:", verdanaFont, 5.5f, true));
+                    tablaDatos.AddCell(GetCell("Título Habilitante:", verdanaFont, 5.5f, false, true));
                     tablaDatos.AddCell(GetCell($"{datos.TituloHabilitante}", verdanaFont, 5.5f));
                     tablaDatos.AddCell(new Cell(1, 2).SetBorder(Border.NO_BORDER)); // Celda vacía sin bordes
 
