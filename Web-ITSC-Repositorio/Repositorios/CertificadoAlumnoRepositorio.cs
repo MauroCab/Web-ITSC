@@ -17,6 +17,8 @@ using Web_ITSC_Repositorio.Repositorios.Genericos;
 using Web_ITSC_Shared.DTO;
 using Microsoft.EntityFrameworkCore;
 using iText.Kernel.Font;
+using iText.Kernel.Pdf.Canvas.Draw;
+using iText.IO.Image;
 
 namespace Web_ITSC_Repositorio.Repositorios
 {
@@ -51,7 +53,7 @@ namespace Web_ITSC_Repositorio.Repositorios
                             .FirstOrDefault(),
                 Folio = context.Notas
                             .Where(n => n.CursadoMateria.Alumno.Id == a.Id && n.Evaluacion.TipoEvaluacion == "Final")
-                            .Select(n => n.Evaluacion.Folio)
+                            .Select(n => n.Evaluacion.Folio) 
                             .FirstOrDefault(),
                 FilasTabla = context.CursadosMateria
                             .Where(cm => cm.AlumnoId == a.Id)
@@ -66,7 +68,7 @@ namespace Web_ITSC_Repositorio.Repositorios
                                             .Where(n => n.CursadoMateriaId == cm.Id && n.Evaluacion.TipoEvaluacion == "Final")
                                             .Select(n => n.ValorNota)
                                             .FirstOrDefault()),
-                                Libro = context.Notas
+                                Libro = context.Notas 
                                         .Where(n => n.CursadoMateriaId == cm.Id && n.Evaluacion.TipoEvaluacion == "Final")
                                         .Select(n => n.Evaluacion.Libro)
                                         .FirstOrDefault(),
@@ -96,20 +98,7 @@ namespace Web_ITSC_Repositorio.Repositorios
 
         }
 
-        #region Fuentes Personalizadas
-        // Ruta a las fuentes en Windows
-        static string fontPathTahoma = @"C:\Windows\Fonts\tahoma.ttf";
-        static string fontPathTimesNewRoman = @"C:\Windows\Fonts\times.ttf";
-        static string fontPathVerdana = @"C:\Windows\Fonts\verdana.ttf";
-        static string fontPathArialMT = @"C:\Windows\Fonts\arial.ttf"; // Arial MT es Arial en Windows
 
-        // Cargar fuentes personalizadas
-        static PdfFont tahomaFont = PdfFontFactory.CreateFont(fontPathTahoma, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
-        static PdfFont timesNewRomanFont = PdfFontFactory.CreateFont(fontPathTimesNewRoman, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
-        static PdfFont verdanaFont = PdfFontFactory.CreateFont(fontPathVerdana, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
-        static PdfFont arialMTFont = PdfFontFactory.CreateFont(fontPathArialMT, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
-
-        #endregion
         public byte[] GenerarCertificadoPDF(GetDatosCertificadosDTO datos)
         {
             using (var stream = new MemoryStream())
@@ -118,7 +107,31 @@ namespace Web_ITSC_Repositorio.Repositorios
                 var pdf = new PdfDocument(writer);
                 var document = new Document(pdf);
 
-                
+                #region Fuentes Personalizadas
+                // Ruta a las fuentes en Windows
+                string fontPathTahoma = @"C:\Windows\Fonts\tahoma.ttf";
+                string fontPathTimesNewRoman = @"C:\Windows\Fonts\times.ttf";
+                string fontPathVerdana = @"C:\Windows\Fonts\verdana.ttf";
+                string fontPathArialMT = @"C:\Windows\Fonts\arial.ttf"; // Arial MT es Arial en Windows
+
+                // Cargar fuentes personalizadas
+                PdfFont tahomaFont = PdfFontFactory.CreateFont(fontPathTahoma, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+                PdfFont timesNewRomanFont = PdfFontFactory.CreateFont(fontPathTimesNewRoman, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+                PdfFont verdanaFont = PdfFontFactory.CreateFont(fontPathVerdana, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+                PdfFont arialMTFont = PdfFontFactory.CreateFont(fontPathArialMT, iText.IO.Font.PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+
+                #endregion
+                string rutaEscudo = Path.Combine(AppContext.BaseDirectory, "DocImages", "Escudo.png");
+                string rutaLogo = Path.Combine(AppContext.BaseDirectory, "DocImages", "LogoIT.png");
+
+                ImageData imageDataLogo = ImageDataFactory.Create(rutaLogo);
+                Image imgLogo = new Image(imageDataLogo).SetAutoScale(true);
+                document.Add(imgLogo);
+
+                ImageData imageDataEscudo = ImageDataFactory.Create(rutaEscudo);
+                Image imgEscudo = new Image(imageDataEscudo).SetAutoScale(true);
+                document.Add(imgEscudo);
+
                 // Título
                 document.Add(new Paragraph("REPUBLICA ARGENTINA")
                                 .SetFont(tahomaFont)
@@ -152,13 +165,17 @@ namespace Web_ITSC_Repositorio.Repositorios
                             .SetFont(timesNewRomanFont)
                             .SetFontSize(15.5f)
                             .SetTextAlignment(TextAlignment.CENTER)
-                            .SetFontColor(ColorConstants.CYAN));
+                            .SetFontColor(ColorConstants.BLUE));
 
                 document.Add(new Paragraph("Tecnicatura Superior en Desarrollo de Software")
                             .SetFont(timesNewRomanFont)
                             .SetFontSize(15.5f)
                             .SetTextAlignment(TextAlignment.CENTER)
-                            .SetFontColor(ColorConstants.RED)); 
+                            .SetFontColor(ColorConstants.RED));
+
+                LineSeparator ls = new LineSeparator(new SolidLine());
+                ls.SetWidth(UnitValue.CreatePercentValue(100)); // Ancho al 100% de la página
+                document.Add(ls);
 
                 document.Add(new Paragraph("CERTIFICADO MATERIAS APROBADAS - ESTUDIANTE REGULAR")
                                 .SetFont(verdanaFont)
@@ -207,6 +224,8 @@ namespace Web_ITSC_Repositorio.Repositorios
 
                     // Agrega la tabla de datos del alumno al PDF
                     document.Add(tablaDatos);
+
+                    document.Add(ls);
 
                     document.Add(new Paragraph("Certifico que el/la estudiante mencionado/a cursa en carácter de REGULAR, la Tecnicatura Superior en Desarrollo de Software (Res 462/12)  y ha aprobado los espacios curriculares que se detallan a continuación:")
                                 .SetFont(tahomaFont)
