@@ -136,6 +136,7 @@ namespace Web_ITSC_Repositorio.Repositorios
 
 
                 #endregion
+
                 //Fecha
                 document.Add(new Paragraph($"Córdoba, {DateTime.Now.Day}/{DateTime.Now.Month}/{DateTime.Now.Year}")
                                 .SetFont(tahomaFont)
@@ -231,10 +232,15 @@ namespace Web_ITSC_Repositorio.Repositorios
                             .SetTextAlignment(TextAlignment.CENTER)
                             .SetFontColor(ColorConstants.RED));
 
-#endregion
+                #endregion
 
-                LineSeparator ls = new LineSeparator(new SolidLine());
-                ls.SetWidth(UnitValue.CreatePercentValue(100)); // Ancho al 100% de la página
+                
+                LineSeparator ls = new LineSeparator(new SolidLine(2f));
+                ls.SetOpacity(0.5f)
+                  .SetWidth(UnitValue.CreatePercentValue(100));
+
+
+
                 document.Add(ls);
 
                 document.Add(new Paragraph("CERTIFICADO MATERIAS APROBADAS - ESTUDIANTE REGULAR")
@@ -289,11 +295,11 @@ namespace Web_ITSC_Repositorio.Repositorios
 
                     document.Add(new Paragraph("Certifico que el/la estudiante mencionado/a cursa en carácter de REGULAR, la Tecnicatura Superior en Desarrollo de Software (Res 462/12)  y ha aprobado los espacios curriculares que se detallan a continuación:")
                                 .SetFont(tahomaFont)
-                                .SetFontSize(5)
+                                .SetFontSize(6)
                                 .SetTextAlignment(TextAlignment.CENTER));
 
-                    // Tabla de materias
-                    Table tablaNotas = new Table(10).UseAllAvailableWidth();
+                    Table tablaNotas = new Table(10).UseAllAvailableWidth()
+                                                    .SetMarginBottom(10);
 
                     #region Tablas Encabezado
                     
@@ -338,6 +344,115 @@ namespace Web_ITSC_Repositorio.Repositorios
 
                     document.Add(tablaNotas);
 
+                    #region tablas de promedios
+                    // Tabla 1 - Promedio General
+                    Table tablaPromedio = new Table(2)
+                        .UseAllAvailableWidth()  // ← Agregar esto
+                        .SetWidth(UnitValue.CreatePercentValue(30))  // ← 30% del ancho disponible
+                        .SetBorder(new SolidBorder(ColorConstants.GRAY, 1))
+                        .SetMarginBottom(4);
+
+                    // Asegurar que GetCell() no quite los bordes, o crear celdas directamente:
+                    tablaPromedio.AddCell(new Cell()
+                        .Add(new Paragraph("Promedio General:").SetFont(verdanaFont).SetFontSize(5.5f))
+                        .SetBorder(Border.NO_BORDER));
+
+                    tablaPromedio.AddCell(new Cell()
+                        .Add(new Paragraph("PromNum").SetFont(verdanaFont).SetFontSize(5.5f))
+                        .SetBorder(Border.NO_BORDER));
+
+                    
+                    document.Add(tablaPromedio);
+
+                    document.Add(ls);
+
+                    // Tabla 2 - Promedios por Año
+
+                    Table tablaPromedioPorAnio = new Table(2)
+                        .UseAllAvailableWidth()  // ← Agregar esto
+                        .SetWidth(UnitValue.CreatePercentValue(30))  // ← 30% del ancho disponible
+                        .SetBorder(new SolidBorder(ColorConstants.GRAY, 1))
+                        .SetMarginTop(4)
+                        .SetMarginBottom(4);
+
+                    // Agregar celdas con bordes
+                    tablaPromedioPorAnio.AddCell(new Cell()
+                        .Add(new Paragraph("PRIMER AÑO").SetFont(verdanaFont).SetFontSize(5.5f))
+                        .SetBorder(Border.NO_BORDER));
+
+                    tablaPromedioPorAnio.AddCell(new Cell()
+                        .Add(new Paragraph("PromNum").SetFont(verdanaFont).SetFontSize(5.5f))
+                        .SetBorder(Border.NO_BORDER));
+
+                    // Repetir para las demás celdas...
+                    tablaPromedioPorAnio.AddCell(new Cell()
+                        .Add(new Paragraph("SEGUNDO AÑO").SetFont(verdanaFont).SetFontSize(5.5f))
+                        .SetBorder(Border.NO_BORDER));
+
+                    tablaPromedioPorAnio.AddCell(new Cell()
+                        .Add(new Paragraph("PromNum").SetFont(verdanaFont).SetFontSize(5.5f))
+                        .SetBorder(Border.NO_BORDER));
+
+                    tablaPromedioPorAnio.AddCell(new Cell()
+                        .Add(new Paragraph("TERCER AÑO").SetFont(verdanaFont).SetFontSize(5.5f))
+                        .SetBorder(Border.NO_BORDER));
+
+                    tablaPromedioPorAnio.AddCell(new Cell()
+                        .Add(new Paragraph("PromNum").SetFont(verdanaFont).SetFontSize(5.5f))
+                        .SetBorder(Border.NO_BORDER));
+
+                    
+                    document.Add(tablaPromedioPorAnio);
+#endregion
+
+
+                    document.Add(ls);
+
+                    document.Add(new Paragraph("Para constancia y a petición del/la interesado/a" +
+                                                " se expide el presente para ser presentado a los fines que hubiere lugar," +
+                                                " sin raspaduras ni enmiendas en la ciudad de \r\nCórdoba" +
+                                                " de la Provincia de Córdoba, República Argentina.")
+                                                .SetFont(verdanaFont)
+                                                .SetFontSize(6f)
+                                                .SetTextAlignment(TextAlignment.LEFT));
+
+                    var cultura = new System.Globalization.CultureInfo("es-ES");
+
+                    document.Add(new Paragraph($"{DateTime.Now.ToString("dddd", cultura)}, {DateTime.Now.Day} de {IntAMes(DateTime.Now.Month, false)} de {DateTime.Now.Year}")
+                                               .SetFont(verdanaFont)
+                                               .SetFontSize(6f)
+                                               .SetTextAlignment(TextAlignment.LEFT));
+
+                    #region Firma
+                    // Contenedor para la firma
+                    Div contenedorFirma = new Div()
+                        .SetHorizontalAlignment(HorizontalAlignment.RIGHT)
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetWidth(UnitValue.CreatePointValue(150))
+                        .SetMarginTop(10);
+
+                    // Línea de firma
+
+                    
+                    LineSeparator lineaFirma = new LineSeparator(new SolidLine(0.5f));
+                    lineaFirma.SetOpacity(0.5f)
+                    .SetWidth(UnitValue.CreatePointValue(150))
+                    .SetMarginBottom(2);
+
+                    contenedorFirma.Add(lineaFirma);
+
+                    // Texto de firma
+                    Paragraph textoFirma = new Paragraph("Firma")
+                        .SetFont(verdanaFont)
+                        .SetFontSize(6f)
+                        .SetMarginBottom(0);
+
+                    contenedorFirma.Add(textoFirma);
+
+                    document.Add(contenedorFirma);
+                    #endregion
+
+                    document.Add(ls);
                     document.Close();
                     return stream.ToArray();
                 }
@@ -387,6 +502,43 @@ namespace Web_ITSC_Repositorio.Repositorios
 
                 default: return "-";
             }
+        }
+
+        private static string IntAMes(int numMes, bool Dia)
+        {
+            
+            switch (numMes)
+            {
+                case 1:
+                    return "enero";
+                case 2:
+                    return "febrero";
+                case 3:
+                    return "marzo";
+                case 4:
+                    return "abril";
+                case 5:
+                    return "mayo";
+                case 6:
+                    return "junio";
+                case 7:
+                    return "julio";
+                case 8:
+                    return "agosto";
+                case 9:
+                    return "septiembre";
+                case 10:
+                    return "octubre";
+                case 11:
+                    return "noviembre";
+                case 12:
+                    return "diciembre";
+                default:
+                    return "mes inválido";
+            }
+            
+            
+               
         }
 
     }
