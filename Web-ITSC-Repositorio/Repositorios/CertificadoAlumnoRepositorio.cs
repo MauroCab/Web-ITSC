@@ -257,32 +257,32 @@ namespace Web_ITSC_Repositorio.Repositorios
                     Table tablaDatos = new Table(4).UseAllAvailableWidth();
 
                     // Agregar filas con datos
-                    tablaDatos.AddCell(GetCell("Apellido y Nombre:", verdanaFont, 5.5f, false, true));
-                    tablaDatos.AddCell(GetCell($"{datos.ApellidoyNombre}", verdanaFont, 5.5f));
-                    tablaDatos.AddCell(GetCell("Legajo:", verdanaFont, 5.5f, false, true));
-                    tablaDatos.AddCell(GetCell($"{datos.Legajo}", verdanaFont, 5.5f));
+                    tablaDatos.AddCell(GetCell("Apellido y Nombre:", verdanaFont, 4f, false, true));
+                    tablaDatos.AddCell(GetCell($"{datos.ApellidoyNombre}", verdanaFont, 4f));
+                    tablaDatos.AddCell(GetCell("Legajo:", verdanaFont, 4f, false, true));
+                    tablaDatos.AddCell(GetCell($"{datos.Legajo}", verdanaFont, 4f));
 
-                    tablaDatos.AddCell(GetCell("Tipo Doc.:", verdanaFont, 5.5f, false, true));
-                    tablaDatos.AddCell(GetCell($"{datos.TipoDocumentoCertificado}", verdanaFont, 5.5f));
-                    tablaDatos.AddCell(GetCell("Nro. Doc.:", verdanaFont, 5.5f, false, true));
-                    tablaDatos.AddCell(GetCell($"{datos.NroDocumento}", verdanaFont, 5.5f));
+                    tablaDatos.AddCell(GetCell("Tipo Doc.:", verdanaFont, 4f, false, true));
+                    tablaDatos.AddCell(GetCell($"{datos.TipoDocumentoCertificado}", verdanaFont, 4f));
+                    tablaDatos.AddCell(GetCell("Nro. Doc.:", verdanaFont, 4f, false, true));
+                    tablaDatos.AddCell(GetCell($"{datos.NroDocumento}", verdanaFont, 4f));
 
-                    tablaDatos.AddCell(GetCell("Fecha de Nacimiento:", verdanaFont, 5.5f, false, true));
-                    tablaDatos.AddCell(GetCell($"{datos.FechadeNacimiento}", verdanaFont, 5.5f));
-                    tablaDatos.AddCell(GetCell("Libro Matriz:", verdanaFont, 5.5f, false, true));
-                    tablaDatos.AddCell(GetCell($"{datos.LibroMatriz}", verdanaFont, 5.5f));
+                    tablaDatos.AddCell(GetCell("Fecha de Nacimiento:", verdanaFont, 4f, false, true));
+                    tablaDatos.AddCell(GetCell($"{datos.FechadeNacimiento}", verdanaFont, 4f));
+                    tablaDatos.AddCell(GetCell("Libro Matriz:", verdanaFont, 4f, false, true));
+                    tablaDatos.AddCell(GetCell($"{datos.LibroMatriz}", verdanaFont, 4f));
 
-                    tablaDatos.AddCell(GetCell("Lugar de Nacimiento:", verdanaFont, 5.5f, false, true));
-                    tablaDatos.AddCell(GetCell($"{datos.LugarNacimiento}", verdanaFont, 5.5f));
-                    tablaDatos.AddCell(GetCell("Folio:", verdanaFont, 5.5f, false, true));
-                    tablaDatos.AddCell(GetCell($"{datos.Folio}", verdanaFont, 5.5f));
+                    tablaDatos.AddCell(GetCell("Lugar de Nacimiento:", verdanaFont, 4f, false, true));
+                    tablaDatos.AddCell(GetCell($"{datos.LugarNacimiento}", verdanaFont, 4f));
+                    tablaDatos.AddCell(GetCell("Folio:", verdanaFont, 4f, false, true));
+                    tablaDatos.AddCell(GetCell($"{datos.Folio}", verdanaFont, 4f));
 
-                    tablaDatos.AddCell(GetCell("Teléfono:", verdanaFont, 5.5f, false, true));
-                    tablaDatos.AddCell(GetCell($"{datos.NroTelefono}", verdanaFont, 5.5f));
+                    tablaDatos.AddCell(GetCell("Teléfono:", verdanaFont, 4f, false, true));
+                    tablaDatos.AddCell(GetCell($"{datos.NroTelefono}", verdanaFont, 4f));
                     tablaDatos.AddCell(new Cell(1, 2).SetBorder(Border.NO_BORDER)); // Celda vacía sin bordes
 
-                    tablaDatos.AddCell(GetCell("Título Habilitante:", verdanaFont, 5.5f, false, true));
-                    tablaDatos.AddCell(GetCell($"{datos.TituloHabilitante}", verdanaFont, 5.5f));
+                    tablaDatos.AddCell(GetCell("Título Habilitante:", verdanaFont, 4f, false, true));
+                    tablaDatos.AddCell(GetCell($"{datos.TituloHabilitante}", verdanaFont, 4f));
                     tablaDatos.AddCell(new Cell(1, 2).SetBorder(Border.NO_BORDER)); // Celda vacía sin bordes
 
 
@@ -328,16 +328,16 @@ namespace Web_ITSC_Repositorio.Repositorios
                     // Filas de la tabla de las condicion de cada materia
                     foreach (var fila in datos.FilasTabla)
                     {
-                        tablaNotas.AddCell(GetCell(fila.Asignatura, verdanaFont, 6.5f, true));
-                        tablaNotas.AddCell(GetCell(fila.ValorNota.ToString(), verdanaFont, 6.5f, true));
-                        tablaNotas.AddCell(GetCell(fila.NotaLetra, verdanaFont, 6.5f, true));
-                        tablaNotas.AddCell(GetCell(fila.Libro, verdanaFont, 6.5f, true)); 
-                        tablaNotas.AddCell(GetCell(fila.Folio, verdanaFont, 6.5f, true));
-                        tablaNotas.AddCell(GetCell($"{fila.Dia}", verdanaFont, 6.5f, true));
-                        tablaNotas.AddCell(GetCell($"{fila.Mes}", verdanaFont, 6.5f, true));
-                        tablaNotas.AddCell(GetCell($"{fila.Anno}", verdanaFont, 6.5f, true));
-                        tablaNotas.AddCell(GetCell(fila.CondicionActual, verdanaFont, 6.5f, true));
-                        tablaNotas.AddCell(GetCell(fila.Sede, verdanaFont, 6.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.Asignatura, verdanaFont, 5.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.ValorNota.ToString(), verdanaFont, 5.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.NotaLetra, verdanaFont, 5.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.Libro, verdanaFont, 5.5f, true)); 
+                        tablaNotas.AddCell(GetCell(fila.Folio, verdanaFont, 5.5f, true));
+                        tablaNotas.AddCell(GetCell($"{fila.Dia}", verdanaFont, 5.5f, true));
+                        tablaNotas.AddCell(GetCell($"{fila.Mes}", verdanaFont, 5.5f, true));
+                        tablaNotas.AddCell(GetCell($"{fila.Anno}", verdanaFont, 5.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.CondicionActual, verdanaFont,56.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.Sede, verdanaFont, 5.5f, true));
 
                         
                     }
@@ -475,7 +475,6 @@ namespace Web_ITSC_Repositorio.Repositorios
                                 .SetFont(fuente)
                                 .SetFontSize(size));
             if (bold) cell.SimulateBold();
-
             if (border)
                 cell.SetBorder(new SolidBorder(1));
             else
