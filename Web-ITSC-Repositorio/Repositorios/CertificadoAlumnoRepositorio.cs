@@ -336,7 +336,7 @@ namespace Web_ITSC_Repositorio.Repositorios
                         tablaNotas.AddCell(GetCell($"{fila.Dia}", verdanaFont, 5.5f, true));
                         tablaNotas.AddCell(GetCell($"{fila.Mes}", verdanaFont, 5.5f, true));
                         tablaNotas.AddCell(GetCell($"{fila.Anno}", verdanaFont, 5.5f, true));
-                        tablaNotas.AddCell(GetCell(fila.CondicionActual, verdanaFont,56.5f, true));
+                        tablaNotas.AddCell(GetCell(fila.CondicionActual, verdanaFont,5.5f, true));
                         tablaNotas.AddCell(GetCell(fila.Sede, verdanaFont, 5.5f, true));
 
                         
