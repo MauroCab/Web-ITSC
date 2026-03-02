@@ -344,6 +344,17 @@ namespace Web_ITSC_Repositorio.Repositorios
 
                     document.Add(tablaNotas);
 
+
+                    int suma = 0;
+                    int cantidad = 0;
+                    foreach (var filaNota in datos.FilasTabla)
+                    {
+                        suma += filaNota.ValorNota;
+                        cantidad++;
+                    }
+
+                    double promedio = (double)suma / cantidad;
+
                     #region tablas de promedios
                     // Tabla 1 - Promedio General
                     Table tablaPromedio = new Table(2)
@@ -358,53 +369,12 @@ namespace Web_ITSC_Repositorio.Repositorios
                         .SetBorder(Border.NO_BORDER));
 
                     tablaPromedio.AddCell(new Cell()
-                        .Add(new Paragraph("PromNum").SetFont(verdanaFont).SetFontSize(5.5f))
+                        .Add(new Paragraph(Math.Round(promedio, 2).ToString()).SetFont(verdanaFont).SetFontSize(5.5f))
                         .SetBorder(Border.NO_BORDER));
 
                     
                     document.Add(tablaPromedio);
-
-                    document.Add(ls);
-
-                    // Tabla 2 - Promedios por Año
-
-                    Table tablaPromedioPorAnio = new Table(2)
-                        .UseAllAvailableWidth()  // ← Agregar esto
-                        .SetWidth(UnitValue.CreatePercentValue(30))  // ← 30% del ancho disponible
-                        .SetBorder(new SolidBorder(ColorConstants.GRAY, 1))
-                        .SetMarginTop(4)
-                        .SetMarginBottom(4);
-
-                    // Agregar celdas con bordes
-                    tablaPromedioPorAnio.AddCell(new Cell()
-                        .Add(new Paragraph("PRIMER AÑO").SetFont(verdanaFont).SetFontSize(5.5f))
-                        .SetBorder(Border.NO_BORDER));
-
-                    tablaPromedioPorAnio.AddCell(new Cell()
-                        .Add(new Paragraph("PromNum").SetFont(verdanaFont).SetFontSize(5.5f))
-                        .SetBorder(Border.NO_BORDER));
-
-                    // Repetir para las demás celdas...
-                    tablaPromedioPorAnio.AddCell(new Cell()
-                        .Add(new Paragraph("SEGUNDO AÑO").SetFont(verdanaFont).SetFontSize(5.5f))
-                        .SetBorder(Border.NO_BORDER));
-
-                    tablaPromedioPorAnio.AddCell(new Cell()
-                        .Add(new Paragraph("PromNum").SetFont(verdanaFont).SetFontSize(5.5f))
-                        .SetBorder(Border.NO_BORDER));
-
-                    tablaPromedioPorAnio.AddCell(new Cell()
-                        .Add(new Paragraph("TERCER AÑO").SetFont(verdanaFont).SetFontSize(5.5f))
-                        .SetBorder(Border.NO_BORDER));
-
-                    tablaPromedioPorAnio.AddCell(new Cell()
-                        .Add(new Paragraph("PromNum").SetFont(verdanaFont).SetFontSize(5.5f))
-                        .SetBorder(Border.NO_BORDER));
-
-                    
-                    document.Add(tablaPromedioPorAnio);
-#endregion
-
+                    #endregion
 
                     document.Add(ls);
 
